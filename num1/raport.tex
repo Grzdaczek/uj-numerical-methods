@@ -1,0 +1,78 @@
+% \documentclass[9pt]{article}
+\documentclass[11pt]{extarticle}
+\usepackage[a4paper, total={6in, 9in}]{geometry}
+\usepackage{multicol}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{pgf}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\author{Grzegorz Janysek}
+\title{Raport - Zadanie numeryczne 1}
+
+\begin{document}
+\maketitle
+
+	\section{Wstęp teoretyczny}
+	
+	Wyniki obliczeń numerycznych są obarczone błędami.
+	Mogą one wynikać z pomyłek człowieka podczas tworzenia i implementacji algorytmów numerycznych, jak i z samej natury obliczeń numerycznych.
+	Dysponując skończoną pamięcią nie jest możliwe reprezentowanie wszystkich liczb rzeczywistych.
+	Niniejsze zadanie skupia się na ukazaniu wpływu błędów wynikających z zaokrągleń oraz doboru algorytmu, na wyniki obliczeń.
+	\paragraph{}
+	Rozpatrywaneym przykładem jest różniczkowanie numeryczne.
+	Jak wiadomo pochodna funkcji \( f(x) \) wyraża się ilorazem różnicowym:
+	\[ f'(x) = \lim_{h \to 0} \frac{f(x+h)-f(x)}{h} \]
+	Możliwe jest obliczenie przybliżonej wartości \( f'(x_0) \) zastępując \( h \to 0 \) na określone małe \( h \).
+	Kożystając z definicji pochodnej wyprowadzono dwie metody na jej przybliżenie numeryczne: \eqref{metoda_a}, \eqref{metoda_b}.
+	\[ 
+		D_hf(x) = \frac{f(x+h)-f(x)}{h}
+		\label{metoda_a} \tag{Metoda a}
+	\]
+	\[
+		D_hf(x) = \frac{f(x+h)-f(x-h)}{2h}
+		\label{metoda_b} \tag{Metoda b}
+	\]
+	Naturalna może być chęć dobrania możliwie jak naj mniejszego \( h \). Wiadomo jednak że dzielenie przez małą liczbę prowadzi może prowadzić do znaczącego błędu. Z kolei dobranie zbyt dużego \( h \) w oczywisty sposób prowadzi do błędu związanego z ''oddaleniem się'' od siebie punktów \( x \) i \( x+h \)
+
+	\section{Wyniki}
+
+	Ponożej (\ref{rys_f32}, \ref{rys_f63}) perzedstawiono wykresy błędu \( E \) funkcji \( sin(x) \), \( x=0.3\), w zależności doboru \( h \), typu danych oraz metody różniczkowania.
+	Błąd jest obliczany z następującego wzoru:
+	\[ E = |D_hf(x) - f'(x)|\]
+	\[ E = |D_hsin(x) - cos'(x)|\]
+
+	\pagebreak
+
+	\begin{figure}[H]
+		\begin{center}
+			\input{f32.pgf}
+		\end{center}
+		\caption{Zależność błędu od doboru \( h \) dla \texttt{float32}}
+		\label{rys_f32}
+	\end{figure}
+
+	\begin{figure}[H]
+		\begin{center}
+			\input{f64.pgf}
+		\end{center}
+		\caption{Zależność błędu od doboru \( h \) dla \texttt{float64}}
+		\label{rys_f63}
+	\end{figure}
+
+	\pagebreak
+
+	Można wyróżnić dwie części każdego z wykresów: tą po lewej stronie minimum błędu i tą po prawej.
+	Po lewej stronie błąd jest wynikiem zaokrągleń małych \( h \), i widoczny jest w postaci szumu numerycznego.
+	Po prawej stronie błąd rośnie liniowo wraz z doborem większych wartości \( h \).
+	Metoda b pozwala na uzyskanie znacząco mniejszego błędu.
+
+
+	\section{Podsumowanie}
+	
+	Wyniki pokazują kluczowość kwestii doboru parametru \( h \) podczas różniczkowania numerycznego.
+	Wartość błędu może być większa o nawet 10 rzędów wielkości od optymalnej przy złym doborze.
+	Wykresy ukazują też w jaki sposób typ danych wpływa na minimalną wartość błędu (dwukrotne zwiększenie zapotrzebowania na pamięć umożliwiło zwiększenie dokładności około 2.5 rzędów wielkości)
+
+\end{document}
