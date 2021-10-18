@@ -6,14 +6,17 @@ CONDA_ACTIVATE=source $$(conda info --base)/etc/profile.d/conda.sh ; conda activ
 
 #=-----------------------------------------------------------------------------
 
-all: tar 
+TARGET = num1.tar.gz
+PROGOUT = f32.pgf f64.pgf
 
-tar: tex *.py
-	$(TAR) out.tar.gz *.py *.pdf
+all: $(TARGET)
 
-tex: *.tex py
-	pdflatex *.tex
+$(TARGET): *.pdf *.py
+	$(TAR) $(TARGET) *.py *.pdf
 
-py: program.py
+%.pdf: %.tex $(PROGOUT)
+	pdflatex $^
+
+$(PROGOUT): program.py
 	$(CONDA_ACTIVATE)
 	python3 $^

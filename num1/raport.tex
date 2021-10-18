@@ -27,11 +27,11 @@
 	Możliwe jest obliczenie przybliżonej wartości \( f'(x_0) \) zastępując \( h \to 0 \) na określone małe \( h \).
 	Kożystając z definicji pochodnej wyprowadzono dwie metody na jej przybliżenie numeryczne: \eqref{metoda_a}, \eqref{metoda_b}.
 	\[ 
-		D_hf(x) = \frac{f(x+h)-f(x)}{h}
+		f'(x) \approx D_hf(x) = \frac{f(x+h)-f(x)}{h}
 		\label{metoda_a} \tag{Metoda a}
 	\]
 	\[
-		D_hf(x) = \frac{f(x+h)-f(x-h)}{2h}
+		f'(x) \approx D_hf(x) = \frac{f(x+h)-f(x-h)}{2h}
 		\label{metoda_b} \tag{Metoda b}
 	\]
 	Naturalna może być chęć dobrania możliwie jak naj mniejszego \( h \). Wiadomo jednak że dzielenie przez małą liczbę prowadzi może prowadzić do znaczącego błędu. Z kolei dobranie zbyt dużego \( h \) w oczywisty sposób prowadzi do błędu związanego z ''oddaleniem się'' od siebie punktów \( x \) i \( x+h \)
@@ -41,7 +41,7 @@
 	Ponożej (\ref{rys_f32}, \ref{rys_f63}) perzedstawiono wykresy błędu \( E \) funkcji \( sin(x) \), \( x=0.3\), w zależności doboru \( h \), typu danych oraz metody różniczkowania.
 	Błąd jest obliczany z następującego wzoru:
 	\[ E = |D_hf(x) - f'(x)|\]
-	\[ E = |D_hsin(x) - cos'(x)|\]
+	\[ E = |D_hsin(x) - cos(x)|\]
 
 	\pagebreak
 
