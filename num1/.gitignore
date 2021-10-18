@@ -1,6 +1,5 @@
 ## Final archive and target output files
 *.tar.gz
-*.pdf
 *.pgf
 *.png
 
