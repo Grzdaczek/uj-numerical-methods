@@ -1,18 +1,5 @@
 import numpy as np
 
-A = np.array([
-	[1, 1],
-	[1, 1.000001],
-])
-
-b_1 = np.array([8, 8])
-b_2 = np.array([8, 8.00001])
-
-x_1 = np.linalg.solve(A, b_1)
-x_2 = np.linalg.solve(A, b_2)
-
-print(x_1, x_2)
-
 A_1 = np.array([
 	[2.40827208, -0.36066254, 0.80575445, 0.46309511, 1.20708553],
 	[-0.36066254, 1.14839502, 0.02576113, 0.02672584, -1.03949556],
@@ -29,10 +16,29 @@ A_2 = np.array([
 	[0.82783473, -0.53591589, 0.13060923, -0.54893124, 2.6276678],
 ])
 
-b_1 = np.array([5.40780228, 3.67008677, 3.12306266, -1.11187948, 0.54437218])
-b_2 = b_1 + np.array([10**-5 , 0, 0, 0, 0])
+b = np.array([5.40780228, 3.67008677, 3.12306266, -1.11187948, 0.54437218])
+b_prim = b + np.array([10**-5 , 0, 0, 0, 0])
 
-print(np.linalg.solve(A_1, b_1))
-print(np.linalg.solve(A_1, b_2))
-print(np.linalg.solve(A_2, b_1))
-print(np.linalg.solve(A_2, b_2))
+y_1 = np.linalg.solve(A_1, b)
+y_1_prim = np.linalg.solve(A_1, b_prim)
+
+y_2 = np.linalg.solve(A_2, b)
+y_2_prim = np.linalg.solve(A_2, b_prim)
+
+delta_1 = np.linalg.norm(y_1 - y_1_prim)
+delta_2 = np.linalg.norm(y_2 - y_2_prim)
+
+cond_A_1 = np.linalg.cond(A_1)
+cond_A_2 = np.linalg.cond(A_2)
+
+print("y_1", y_1)
+print("y_1_prim", y_1_prim)
+
+print("y_2", y_2)
+print("y_2_prim", y_2_prim)
+
+print("delta_1", delta_1)
+print("delta_2", delta_2)
+
+print("cond_A_1", cond_A_1)
+print("cond_A_2", cond_A_2)
