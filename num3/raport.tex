@@ -1,0 +1,82 @@
+\documentclass[11pt]{extarticle}
+\usepackage[a4paper, margin=1in]{geometry}
+% \usepackage[a4paper]{geometry}
+\usepackage{multicol}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{lipsum}
+\usepackage{mathtools}
+\usepackage{cuted}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\author{Grzegorz Janysek}
+\title{Raport - Zadanie numeryczne 3}
+
+\begin{document}
+	\maketitle
+
+	\section{Wstęp teoretyczny}
+	
+	\subsection{}
+
+	W ogólnym przypadku złożoność numerycznego rozwiązywania układów równań z liniowych to \(O(n^3)\).
+	Daje się ją jednak znacząco zmniejszyć stosując algorytmy wykożystujące strukturę macierzy.
+	Zadanie skupia się na metodzie dla szczególego rodzaju kwadratowej macjeży żadkiej: macieży wstęgowej (in. pasmowej). 
+	Charakteryzuje się ona tym że poza główną diagonalą i wstęgą wokół niej wszystkie elementy są zerowe.
+	
+	\begin{align}
+		\begin{bmatrix}
+								\bullet	&	\circ	&	\circ	\\
+					\circ	&	\bullet	&	\circ	&	\circ	\\
+			&		\circ	&	\bullet	&	\circ	&	\circ	\\
+			&&		\ddots	&	\ddots	&	\ddots	&	\ddots	\\
+			&&&		\circ	&	\bullet	&	\circ	&	\circ	\\
+			&&&&	\circ	&	\bullet	&	\circ	&	\circ	\\
+			&&&&&	\circ	&	\bullet &	\circ	\\
+			&&&&&&	\circ	&	\bullet	&	\\
+		\end{bmatrix}
+	\end{align}
+	
+	\subsection{}
+
+	Przechowywanie macieży w pamięci w ogólnym przypadku zajmuje \(x*n^2\), gdzie \(x\) to rozmiar typu danych.
+	Do zapisania macierzy z zadania dla typu danych \emph{float64} konieczne by było: 
+
+	\begin{align}
+		\text{dla } N=100 &:& 8\text{B}*100^2 &= 80\text{kB} \\
+		\text{dla } N=1,000 &:& 8\text{B}*1,000^2 &= 8\text{MB} \\
+		\text{dla } N=10,000 &:& 8\text{B}*10,000^2 &= 800\text{MB}
+	\end{align}
+
+	Dla ogólnej macierzy wstęgowej większość elementów to zera na znanych pozycjach poza wstęgą.
+	Pozwala to na optymalizację polegającą na przechowywaniu jedynie wstęgi, 
+	w postaci np. tablicy dwuwymiarowej \(a\times n\) której rozmiar to \(x*a*n\), gdzie \(a\) to szerokość wstęgi.
+
+	\begin{align}
+		\text{dla } N=100 &:& 8\text{B}*4*100 &= 3.2\text{kB} \\
+		\text{dla } N=1,000 &:& 8\text{B}*4*1,000 &= 32\text{kB} \\
+		\text{dla } N=10,000 &:& 8\text{B}*4*10,000 &= 320\text{kB}
+	\end{align}
+
+	\subsection{}
+
+	Faktoryzacja \(LU\) zachowuje strukturę macieży pasmowej.
+	Wiedząc to można pominąć obliczanie elementów macieży \(L\) oraz \(U\) poza wstęgą, ponieważ z powyższego wynika że będą one zerowe.
+	Ogranicza to konieczność obliczeń tylko dla elemetów wstęgi, których ilosć jest rzędu \(n\).
+	Dodatkowo ilość elementów sumy koniecznych do obliczania wartości elementu w \(L\) lub w \(U\) pozostaje nie większa niż szerokość wstęgi.
+	Wykożystując to można zmniejszyć złożoność rozkładu dla macieży wstęgowej do \(O(n)\).
+	W połączeniu z \emph{back-substitution} i \emph{forward-substitution} których złożoność wynosi \(O(n)\),
+	otrzymujemy całkowitą złożoność rozwiązywania układów równań liniowych z macieżą wstęgową wynoszącą \(O(n)\)
+
+	\pagebreak
+
+	\section{Wyniki}
+	
+	\section{Podsumowanie}
+
+	Podczas rozwiązywania układów równań liniowych kluczowa jest znajomość struktury macieży.
+	Pozwala to na dobranie odpowiedniego sposobu przechowywania w pamięci, oraz algorytmu faktoryzacji,
+	potencjalnie dramatycznie zmniejszając zużycie pamięci oraz czas procesora.
+
+\end{document}
