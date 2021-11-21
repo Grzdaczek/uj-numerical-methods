@@ -30,21 +30,21 @@ class BandMatrix:
 			a, b, = ab
 			self.bands[a][b] = x
 
-	# def non_zero_before(self, i, j) -> tuple[int, int]:
-	# 	band = j - i + self.diagonal_index
-	# 	x = len(self.bands) - band
-	# 	return [0, 0]
-	# 	pass
+	def meaningful_above(self, i, j) -> int:
+		ab = self.pos_to_band(i, j)
+		if ab:
+			a, _ = ab
+			return len(bands) - a
+		else:
+			return 0
 
-	# def non_zero_after(self, i, j) -> tuple[int, int]:
-	# 	return [0, 0]
-	# 	pass
-
-	# def first_meaningfull_j(i):
-	# 	pass
-
-	# def first_meaningfull_i(j):
-	# 	pass
+	def meaningful_before(self, i, j) -> int:
+		ab = self.pos_to_band(i, j)
+		if ab:
+			a, _ = ab
+			return a
+		else:
+			return 0
 
 	def print(self):
 		for i in range(0, self.size):
@@ -60,12 +60,14 @@ def lu_decomp(M):
 
 		for point in upper_range:
 			i, j = point
-			x = M.get(i, j) - sum([ M.get(i, k)*M.get(k, j) for k in range(0, i)])
+			r = range(max(0, i - M.meaningful_above(i, j)), i)
+			x = M.get(i, j) - sum([ M.get(i, k)*M.get(k, j) for k in r])
 			M.set(i, j, x)
 
 		for point in lower_range:
 			i, j = point
-			x = M.get(i, j) - sum([ M.get(i, k)*M.get(k, j) for k in range(0, j)])
+			r = range(max(0, j - M.meaningful_before(i, j)), j)
+			x = M.get(i, j) - sum([ M.get(i, k)*M.get(k, j) for k in r])
 			x *= 1 / M.get(j, j)
 			M.set(i, j, x)
 
@@ -96,11 +98,11 @@ bands = [
 # ]
 
 A = BandMatrix(bands)
-A.print()
+# A.print()
 
-print('=========================')
+# print('=========================')
 lu_decomp(A)
-A.print()
+# A.print()
 
-print('=========================')
+# print('=========================')
 print('det:', lu_det(A))
