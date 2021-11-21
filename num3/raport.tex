@@ -23,7 +23,7 @@
 	W ogólnym przypadku złożoność numerycznego rozwiązywania układów równań z liniowych to \(O(n^3)\).
 	Daje się ją jednak znacząco zmniejszyć stosując algorytmy wykożystujące strukturę macierzy.
 	Zadanie skupia się na metodzie dla szczególego rodzaju kwadratowej macjeży żadkiej: macieży wstęgowej (in. pasmowej). 
-	Charakteryzuje się ona tym że poza główną diagonalą i wstęgą wokół niej wszystkie elementy są zerowe.
+	Charakteryzuje się ona tym, że poza główną diagonalą i wstęgą wokół niej, wszystkie elementy są zerowe.
 	
 	\begin{align}
 		\begin{bmatrix}
@@ -41,35 +41,47 @@
 	\subsection{}
 
 	Przechowywanie macieży w pamięci w ogólnym przypadku zajmuje \(x*n^2\), gdzie \(x\) to rozmiar typu danych.
-	Do zapisania macierzy z zadania dla typu danych \emph{float64} konieczne by było: 
+	Do zapisania macierzy dla typu danych \emph{float64} konieczne by było: 
 
 	\begin{align}
-		\text{dla } N=100 &:& 8\text{B}*100^2 &= 80\text{kB} \\
-		\text{dla } N=1,000 &:& 8\text{B}*1,000^2 &= 8\text{MB} \\
-		\text{dla } N=10,000 &:& 8\text{B}*10,000^2 &= 800\text{MB}
+		\text{dla } n=100 &:& 8\text{B}*100^2 &= 80\text{kB} \\
+		\text{dla } n=1,000 &:& 8\text{B}*1,000^2 &= 8\text{MB} \\
+		\text{dla } n=10,000 &:& 8\text{B}*10,000^2 &= 800\text{MB}
 	\end{align}
 
-	Dla ogólnej macierzy wstęgowej większość elementów to zera na znanych pozycjach poza wstęgą.
-	Pozwala to na optymalizację polegającą na przechowywaniu jedynie wstęgi, 
-	w postaci np. tablicy dwuwymiarowej \(a\times n\) której rozmiar to \(x*a*n\), gdzie \(a\) to szerokość wstęgi.
+	Dla ogólnej macierzy wstęgowej większość elementów to zera, na znanych pozycjach poza wstęgą.
+	Pozwala to na optymalizację polegającą na przechowywaniu jedynie wstęgi w postaci np. tablicy dwuwymiarowej \(a\times n\),
+	której rozmiar to \(x*a*n\), gdzie \(x\) to rozmiar typu danych, \(a\) to szerokość wstęgi.
+	Na zapis w ten sposób potrzeba znacząco mniej pamięci. Zakładając szerokość wstęgi \(a=4\) (jak dla macierzy w zadaniu) mamy:
 
 	\begin{align}
-		\text{dla } N=100 &:& 8\text{B}*4*100 &= 3.2\text{kB} \\
-		\text{dla } N=1,000 &:& 8\text{B}*4*1,000 &= 32\text{kB} \\
-		\text{dla } N=10,000 &:& 8\text{B}*4*10,000 &= 320\text{kB}
+		\text{dla } n=100 &:& 8\text{B}*4*100 &= 3.2\text{kB} \\
+		\text{dla } n=1,000 &:& 8\text{B}*4*1,000 &= 32\text{kB} \\
+		\text{dla } n=10,000 &:& 8\text{B}*4*10,000 &= 320\text{kB}
 	\end{align}
 
 	\subsection{}
 
 	Faktoryzacja \(LU\) zachowuje strukturę macieży pasmowej.
-	Wiedząc to można pominąć obliczanie elementów macieży \(L\) oraz \(U\) poza wstęgą, ponieważ z powyższego wynika że będą one zerowe.
-	Ogranicza to konieczność obliczeń tylko dla elemetów wstęgi, których ilosć jest rzędu \(n\).
+	Wiedząc to można pominąć obliczanie elementów macieży \(L\) oraz \(U\) poza wstęgą, ponieważ z powyższego wynika, że będą one zerowe.
+	Ogranicza to konieczność obliczeń tylko dla elemetów wstęgi, których ilosć jest rzędu \(n\).	
 	Dodatkowo ilość elementów sumy koniecznych do obliczania wartości elementu w \(L\) lub w \(U\) pozostaje nie większa niż szerokość wstęgi.
 	Wykożystując to można zmniejszyć złożoność rozkładu dla macieży wstęgowej do \(O(n)\).
+	
+	Otrzymujemy przekształcenia (\ref{uij}, \ref{lij}) jawnych wzorów na wartości elementów \(L\) i \(U\),
+	gdzie \(p\) odległością od górnej krawędzi wstęgi elemenu \(u_{ij}\), a \(q\) jest odległością od lewek krawędzi wstęgi elemenu \(l_{ij}\)
+
+	\begin{align}
+		\label{uij}
+		u_{ij} &= a_{ij} - \sum_{k=i-p}^{i-1} l_{ij}u_{kj} \\
+		\label{lij}
+		l_{ij} &= \frac{1}{u_{jj}} \left( a_{ij} - \sum_{k=j-q}^{j-1} l_{ij}u_{kj} \right)
+	\end{align}
+
 	W połączeniu z \emph{back-substitution} i \emph{forward-substitution} których złożoność wynosi \(O(n)\),
 	otrzymujemy całkowitą złożoność rozwiązywania układów równań liniowych z macieżą wstęgową wynoszącą \(O(n)\)
 
-	\pagebreak
+	% \pagebreak
 
 	\section{Wyniki}
 	
