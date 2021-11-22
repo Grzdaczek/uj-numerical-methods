@@ -82,18 +82,20 @@ def lu_det(M):
 def lu_solve(M, x):
 	y = [None for _ in range(M.size)]
 	for i in range(0, M.size):
-		y[i] = x[i] - sum([ y[k]*M.get(i, k) for k in range(0, i) ])
+		r = range(max(i - M.meaningful_before(i, i), 0), i)
+		y[i] = x[i] - sum([ y[k]*M.get(i, k) for k in r])
 
 	z = [None for _ in range(M.size)]
 	for i in reversed(range(0, M.size)):
-		z[i] = (y[i] - sum([ z[k]*M.get(i, k) for k in range(i+1, M.size)])) / M.get(i, i)
+		r = range(i + 1, max(M.size, M.meaningful_above(i, i)))
+		z[i] = (y[i] - sum([ z[k]*M.get(i, k) for k in r])) / M.get(i, i)
 
 	return z
 
 N = 100
 bands = [
-	[0.2		for _ in range(0, N-1)],
-	[1.2		for _ in range(0, N)], # <--- diagonal
+	[0.2			for _ in range(0, N-1)],
+	[1.2			for _ in range(0, N)], # <--- diagonal
 	[0.1/(n+1)		for n in range(0, N-1)],
 	[0.4/(n+1)**2	for n in range(0, N-2)],
 ]

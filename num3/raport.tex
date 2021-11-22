@@ -1,6 +1,5 @@
 \documentclass[11pt]{extarticle}
 \usepackage[a4paper, margin=1in]{geometry}
-% \usepackage[a4paper]{geometry}
 \usepackage{multicol}
 \usepackage{float}
 \usepackage{amsmath}
@@ -17,14 +16,11 @@
 	\maketitle
 
 	\section{Wstęp teoretyczny}
-	
 	\subsection{}
-
-	W ogólnym przypadku złożoność numerycznego rozwiązywania układów równań z liniowych to \(O(n^3)\).
-	Daje się ją jednak znacząco zmniejszyć stosując algorytmy wykożystujące strukturę macierzy.
-	Zadanie skupia się na metodzie dla szczególego rodzaju kwadratowej macjeży żadkiej: macieży wstęgowej (in. pasmowej). 
+	W ogólnym przypadku złożoność numerycznego rozwiązywania układów równań liniowych to \(O(n^3)\).
+	Złożoność daje się jednak znacząco zmniejszyć stosując algorytmy wykorzystujące strukturę macierzy.
+	Zadanie skupia się na metodzie dla szczególego rodzaju kwadratowej macierzy rzadkiej: macierzy wstęgowej (in. pasmowej). 
 	Charakteryzuje się ona tym, że poza główną diagonalą i wstęgą wokół niej, wszystkie elementy są zerowe.
-	
 	\begin{align}
 		\begin{bmatrix}
 								\bullet	&	\circ	&	\circ	\\
@@ -33,19 +29,18 @@
 			&&		\ddots	&	\ddots	&	\ddots	&	\ddots	\\
 			&&&		\circ	&	\bullet	&	\circ	&	\circ	\\
 			&&&&	\circ	&	\bullet	&	\circ	&	\circ	\\
-			&&&&&	\circ	&	\bullet &	\circ	\\
-			&&&&&&	\circ	&	\bullet	&	\\
+			&&&&&	\circ	&	\bullet &	\circ				\\
+			&&&&&&	\circ	&	\bullet	&						\\
 		\end{bmatrix}
 	\end{align}
 	
 	\subsection{}
-
-	Przechowywanie macieży w pamięci w ogólnym przypadku zajmuje \(x*n^2\), gdzie \(x\) to rozmiar typu danych.
+	Przechowywanie macierzy w pamięci w ogólnym przypadku zajmuje \(x*n^2\), gdzie \(x\) to rozmiar typu danych.
 	Do zapisania macierzy dla typu danych \emph{float64} konieczne by było: 
-
 	\begin{align}
 		\text{dla } n=100 &:& 8\text{B}*100^2 &= 80\text{kB} \\
 		\text{dla } n=1,000 &:& 8\text{B}*1,000^2 &= 8\text{MB} \\
+		\label{rozmiar_og_N10000}
 		\text{dla } n=10,000 &:& 8\text{B}*10,000^2 &= 800\text{MB}
 	\end{align}
 
@@ -53,25 +48,23 @@
 	Pozwala to na optymalizację polegającą na przechowywaniu jedynie wstęgi w postaci np. tablicy dwuwymiarowej \(a\times n\),
 	której rozmiar to \(x*a*n\), gdzie \(x\) to rozmiar typu danych, \(a\) to szerokość wstęgi.
 	Na zapis w ten sposób potrzeba znacząco mniej pamięci. Zakładając szerokość wstęgi \(a=4\) (jak dla macierzy w zadaniu) mamy:
-
 	\begin{align}
 		\text{dla } n=100 &:& 8\text{B}*4*100 &= 3.2\text{kB} \\
 		\text{dla } n=1,000 &:& 8\text{B}*4*1,000 &= 32\text{kB} \\
+		\label{rozmiar_diag_N10000}
 		\text{dla } n=10,000 &:& 8\text{B}*4*10,000 &= 320\text{kB}
 	\end{align}
 
 	\subsection{}
-
-	Faktoryzacja \(LU\) zachowuje strukturę macieży pasmowej.
-	Wiedząc to można pominąć obliczanie elementów macieży \(L\) oraz \(U\) poza wstęgą, ponieważ z powyższego wynika, że będą one zerowe.
+	Faktoryzacja \(LU\) zachowuje strukturę macierzy pasmowej.
+	Wiedząc to można pominąć obliczanie elementów macierzy \(L\) oraz \(U\) poza wstęgą, ponieważ z powyższego wynika, że będą one zerowe.
 	Ogranicza to konieczność obliczeń tylko dla elemetów wstęgi, których ilosć jest rzędu \(n\).	
 	Dodatkowo ilość elementów sumy koniecznych do obliczania wartości elementu w \(L\) lub w \(U\) pozostaje nie większa niż szerokość wstęgi.
-	Wykożystując to można zmniejszyć złożoność rozkładu dla macieży wstęgowej do \(O(n)\).
+	Wykorzystując to można zmniejszyć złożoność rozkładu dla macierzy wstęgowej do \(O(n)\).
 	
 	Otrzymujemy przekształcenia (\ref{uij}, \ref{lij}) jawnych wzorów na wartości elementów \(L\) i \(U\),
 	gdzie \(W\) to zbiór elementów należących do wstęgi
 	% gdzie \(p\) odległością od górnej krawędzi wstęgi elemenu \(u_{ij}\), a \(q\) jest odległością od lewek krawędzi wstęgi elemenu \(l_{ij}\)
-
 	\begin{align}
 		\label{uij}
 		u_{ij} &= a_{ij} - \sum_{k \in P} l_{ik}u_{kj}									&P = \{ k:  k<i \land l_{ik} \in W \land u_{kj} \in W \} \\
@@ -83,8 +76,7 @@
 	otrzymujemy całkowitą złożoność rozwiązywania układów równań liniowych z macieżą wstęgową wynoszącą \(O(n)\)
 
 	\subsection{}
-	W ćwiczeniu należy znaleźć \(y = A^{-1}x\) gdzie
-
+	W ćwiczeniu należy znaleźć \(y = A^{-1}x\) dla \(N=100\) gdzie
 	\begin{align}
 		A = \begin{bmatrix}
 							  1.2		& \frac{0.1}{1}		& \frac{0.4}{1^2} 		\\[6pt]
@@ -93,7 +85,7 @@
 			&&		\ddots	& \ddots	& \ddots			& \ddots 				\\[6pt]
 			&&&		0.2		& 1.2		& \frac{0.1}{N-2}	& \frac{0.4}{(N-2)^2} 	\\[6pt]
 			&&&&	0.2		& 1.2		& \frac{0.1}{N-1}							\\[6pt]
-			&&&&&	0.2		& 1.2													\\
+			&&&&&	0.2		& 1.2
 		\end{bmatrix} &&
 		x = \begin{bmatrix}
 			1 \\[6pt]
@@ -107,7 +99,8 @@
 	\end{align}
 
 	\section{Wyniki}
-	
+
+	Wyniki pokrywają się z oczekiwanymi uzyskanymi za pomocą biblioteki numerycznej.
 	\begin{align}
 		\setlength{\jot}{10pt}
 		det(A) = 78240161.00959387 \\[20pt]
@@ -119,8 +112,8 @@
 			3.557571715528883 \\
 			4.284492868897645 \\
 			5.00721018451999 \\
-			5.727664002754518 \\
 			\vdots \\
+			% 5.727664002754518 \\
 			% 6.446615582748809 \\
 			% 7.164554400995276 \\
 			% 7.881773878242026 \\
@@ -206,20 +199,24 @@
 			% 65.04813298447127 \\
 			% 65.76245055431694 \\
 			% 66.47676742915336 \\
-			67.19108363147355 \\
-			67.9053991828134 \\
-			68.61971410401004 \\
-			69.33402833257784 \\
-			70.0483379441879 \\
-			70.7650588638003 \\
+			% 67.19108363147355 \\
+			% 67.9053991828134 \\
+			% 68.61971410401004 \\
+			% 69.33402833257784 \\
+			% 70.0483379441879 \\
+			% 70.7650588638003 \\
 			71.53915685603329
 		\end{bmatrix}
 	\end{align}
 	
+	\pagebreak
 	\section{Podsumowanie}
 
-	Podczas rozwiązywania układów równań liniowych kluczowa jest znajomość struktury macieży.
-	Pozwala to na dobranie odpowiedniego sposobu przechowywania w pamięci, oraz algorytmu faktoryzacji,
-	potencjalnie dramatycznie zmniejszając zużycie pamięci oraz czas procesora.
+	Podczas rozwiązywania układów równań liniowych bardzo istotna jest znajomość struktury macierzy.
+	Pozwala ona na dobranie odpowiedniego sposobu przechowywania macierzy w pamięci;
+	dla rozpatrywanego przypadku \(n=10,000\) (\ref{rozmiar_og_N10000}, \ref{rozmiar_diag_N10000})
+	optymalizacja reprezentacji pozwala na zmniejszenia zapotrzebowania na pamięć o \(96\%\).
+	Oraz umożliwia wybranie algorytmu faktoryzacji o najmniejszej złożoności,
+	potencjalnie zmniejszając czas procesora \(n^2\) razy.
 
 \end{document}
