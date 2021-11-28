@@ -3,6 +3,7 @@
 \usepackage{multicol}
 \usepackage{float}
 \usepackage{amsmath}
+\usepackage{amsfonts}
 \usepackage{lipsum}
 \usepackage{mathtools}
 \usepackage{cuted}
@@ -16,7 +17,7 @@
 	\maketitle
 
 	\section{Wstęp teoretyczny}
-	
+
 	\subsection{}
 	Rozwiązując problem \( y=A^{-1}b\), w celu przyspieszenia obliczeń i zmniejszenia zużyciu zasobów, chcemy wykożystać strukturę \( A \).
 	Jeżeli jesteśmy w stanie przedstawić problem jako:
@@ -42,10 +43,127 @@
 		y &= p - \frac{ qv^Tp }{ 1 + v^Tq }
 	\end{align}
 	Problem sprowadza się więc do znalezienia faktoryzacji \(B\) w celu obliczenia \(p\) i \(q\).
-	
+
+	\pagebreak
+	\subsection{}
+	W ćwiczeniu należy wykożystać srukturę zadanej macierzy \(A\), i rozwiązać \(y = A^{-1}b\).
+	\begin{align}
+		A = \begin{bmatrix}
+			10		& 8		& 1		& \dotsm	& 1		& 1		& 1 	\\
+			1		& 10	& 8		& \dotsm	& 1		& 1		& 1 	\\
+			1		& 1		& 10	& \dotsm	& 1		& 1		& 1 	\\
+			\vdots	&\vdots	&\vdots	& \ddots	&\vdots	&\vdots	&\vdots	\\
+			1		& 1		& 1		& \dotsm	& 10	& 8		& 1 	\\
+			1		& 1		& 1		& \dotsm	& 1		& 10	& 8 	\\
+			1		& 1		& 1		& \dotsm	& 1		& 1		& 10
+		\end{bmatrix} \qquad
+		b = \begin{bmatrix}
+			5 \\
+			5 \\
+			5 \\
+			5 \\
+			5 \\
+			\vdots \\
+			5 \\
+		\end{bmatrix} \\[12pt]
+		A \in \mathbb{R}^{N \times N}, \quad
+		b \in \mathbb{R}^{N}, \quad
+		N = 50
+	\end{align}
+	Łatwo można zauważyć że poza wstęgą macierz \(A\) zawiera jedynie liczby \(1\).
+	Pozwala to na zapisanie \(A\) jako sumy macierzy wstęgowej i macierzy jedynek: \(A = B + uv^T\)
+	\begin{align}
+		B = \begin{bmatrix}
+					9		& 7	\\
+			& 		9		& 7 \\
+			&& 		9		& 7 \\
+			&&&		\ddots	& \ddots \\
+			&&&&	9		& 7 \\
+			&&&&&	9		& 7 \\
+			&&&&&&	9 \\
+		\end{bmatrix} \qquad
+		u = v = \begin{bmatrix}
+			1 \\
+			1 \\
+			1 \\
+			1 \\
+			1 \\
+			\vdots \\
+			1 \\
+		\end{bmatrix}
+	\end{align}
+	Kożystając z zależności (5, 6), Musimy rozwiązać dwa układy równań z \(B\).
+	Złożoność faktoryzacji \(LU\) maciży wstęgowej, \textit{backward-substitution} i \textit{forward-substitution} to \(O(n)\).
+	Pozostałe operacje konieczne do obliczenia \(y\) to iloczyn skalarny o złożności \(O(n)\),
+	działanie macierzą na wektor o złożności \(O(n^2)\),
+	iloczyn zewnętrzny wektorów \(q\) i \(v\) o złożności \(O(n^2)\)
+	oraz mnożenie wektora przez skalar o złożności \(O(n)\).
+	Więc całkowita złożność czasowa takiego rozwiązania wynosi \(O(n^2)\) w porówaniu do \(O(n^3)\) w ogólnym przypadku.
 
 	\section{Wyniki}
+	Wyniki zgadzają się z obliczonymi bezpośrednio z użyciem metody z biblioteki algebry komputerowej.
+	\begin{align}
+		y = \begin{bmatrix}
+			0.07525844 \\
+			0.07525904 \\
+			0.07525827 \\
+			0.07525926 \\
+			0.07525799 \\
+			0.07525963 \\
+			0.07525752 \\
+			0.07526122 \\
+			0.07525546 \\
+			0.07526287 \\
+			0.07525334 \\
+			0.07526559 \\
+			0.07524985 \\
+			0.07527009 \\
+			\vdots \\
+			% 0.07524406 \\
+			% 0.07527753 \\
+			% 0.0752345  \\
+			% 0.07528983 \\
+			% 0.07521869 \\
+			% 0.07531015 \\
+			% 0.07519256 \\
+			% 0.07534375 \\
+			% 0.07514936 \\
+			% 0.07539929 \\
+			% 0.07507795 \\
+			% 0.0754911  \\
+			% 0.07495991 \\
+			% 0.07564287 \\
+			% 0.07476477 \\
+			% 0.07589376 \\
+			% 0.0744422  \\
+			% 0.07630849 \\
+			% 0.07390898 \\
+			% 0.07699406 \\
+			% 0.07302753 \\
+			% 0.07812736 \\
+			% 0.07157043 \\
+			% 0.08000077 \\
+			% 0.06916176 \\
+			% 0.08309763 \\
+			% 0.06518009 \\
+			% 0.08821693 \\
+			% 0.05859813 \\
+			% 0.09667944 \\
+			% 0.04771776 \\
+			% 0.11066849 \\
+			% 0.02973183 \\
+			0.13379325 
+		\end{bmatrix}
+	\end{align}
 
 	\section{Podsumowanie}
+	Wzór Shermana-Morrisona jest bardzo dobrym narzędziem znajdywania odwrotności macierzy
+	pod warunkiem że znamy odwrotność jej zaburzenia i
+	jesteśmy w stanie to zaburzenie wyrazić jako produk zewnętrzny dwuch wektorów.
+	Można zyskać na złożności nawet w przypadku gdy nie znamy odwrotność zaburzenia
+	ale jest ono łatwiejsze do obliczenia niż odwrotność samej macierzy.
+	Po przekształceniu może służyć jako narzędzie służące przyspieszeniu rozwiązywania układów równań liniowych
+	zamieniając problem faktoryzacji macieży na problem znajdywania faktoryzacji jej zabutzenia.
+
 
 \end{document}
