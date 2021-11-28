@@ -1,0 +1,51 @@
+\documentclass[11pt]{extarticle}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{multicol}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{lipsum}
+\usepackage{mathtools}
+\usepackage{cuted}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\author{Grzegorz Janysek}
+\title{Raport - Zadanie numeryczne 4}
+
+\begin{document}
+	\maketitle
+
+	\section{Wstęp teoretyczny}
+	
+	\subsection{}
+	Rozwiązując problem \( y=A^{-1}b\), w celu przyspieszenia obliczeń i zmniejszenia zużyciu zasobów, chcemy wykożystać strukturę \( A \).
+	Jeżeli jesteśmy w stanie przedstawić problem jako:
+	\begin{align}
+		\label{y2}
+		y &= (B + uv^T)^{-1}b \qquad \text{gdzie} \qquad A = B + uv^T
+	\end{align}
+	w taki sposób że złożność faktoryzacji \(B\) jest mniejsza od złożności faktoryzacji \(A\),
+	możemy wykożystać wzór Shermana-Morrisona:
+	\begin{align}
+		(B + uv^T)^{-1} = B^{-1} - \frac{ B^{-1}uv^TB^{-1} }{ 1 + v^TB^{-1}u }
+	\end{align}
+	Podstawiając do (\ref{y2}) otrzymujemy
+	\begin{align}
+		y &= \left( B^{-1} - \frac{ B^{-1}uv^TB^{-1} }{ 1 + v^TB^{-1}u } \right)b \\[12pt]
+		y &= B^{-1}b - \frac{ B^{-1}uv^TB^{-1}b }{ 1 + v^TB^{-1}u }
+	\end{align}
+	Zauważmy teraz że \(B\) występuje tylko w postaci \(B^{-1}\).
+	Nie chcemy explicite obliczać odwrotności \(B\).
+	To czego potrzebujemy to \(B^{-1}b\) oraz \(B^{-1}u\).
+	\begin{align}
+		p &= B^{-1}b \qquad q = B^{-1}u \\[12pt]
+		y &= p - \frac{ qv^Tp }{ 1 + v^Tq }
+	\end{align}
+	Problem sprowadza się więc do znalezienia faktoryzacji \(B\) w celu obliczenia \(p\) i \(q\).
+	
+
+	\section{Wyniki}
+
+	\section{Podsumowanie}
+
+\end{document}
