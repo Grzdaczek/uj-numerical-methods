@@ -3,33 +3,73 @@ import scipy as sp
 import scipy.linalg as spl
 import scipy.sparse as sps
 import scipy.sparse.linalg
+import matplotlib.pyplot as plt
+import time
 
-N = 50
+def gen_data(N):
+	# Na potrzeby wzoru Shermana-Morrisona
+	data = np.array([np.full(N, 9), np.full(N, 7)])
+	offsets = np.array([0, 1])
+	B = sps.dia_matrix((data, offsets), shape=(N, N))
+	u = np.full(N, 1)
+	v = u
+	# Wyraz wolny
+	b = np.full(N, 5)
+	return [B, b, u, v]
 
-# Na potrzeby wzoru Shermana-Morrisona
-data = np.array([np.full(N, 9), np.full(N, 7)])
-offsets = np.array([0, 1])
-B = sps.dia_matrix((data, offsets), shape=(N, N))
-u = np.full(N, 1)
-v = u
+def solve_sh_mor(B, b, u, v):
+	start = time.time()
+	# Rozwiązanie z wykożystaniem wzoru Shermana-Morrisona
+	LU = sps.linalg.splu(B.tocsc())
+	p = LU.solve(b)
+	q = LU.solve(u)
+	y = p - (q * np.dot(v, p)) / (1 + np.dot(v, q))
+	t = time.time() - start
+	return [y, t]
 
-# Wyraz wolny
-b = np.full(N, 5)
+def solve_force(A, b):
+	# Rozwiązanie nie wykorzystujące struktury macierzy
+	start = time.time()
+	y = np.linalg.solve(A, b)
+	t = time.time() - start
+	return [y, t]
 
-# Macierz A = B+uv^T
+# Rozwiązanie dla N = 50
+B, b, u, v = gen_data(50)
 A = B.toarray() + np.outer(u, v)
+y1, _ = solve_sh_mor(B, b, u, v)
+y2, _ = solve_force(A, b)
+assert(np.linalg.norm(y1 - y2) < 10**(-10))
+print(y1)
 
-# Sprawdzenie, nie wykorzystujące struktury macierzy
-y1 = np.linalg.solve(A, b)
+###############################################################################
+# Porównanie czasu dla N > 50
 
-# Rozwiązanie z wykożystaniem wzoru Shermana-Morrisona
-LU = sps.linalg.splu(B.tocsc())
-p = LU.solve(b)
-q = LU.solve(u)
-y2 = p - (np.matmul(np.outer(q, v), p)) / (1 + np.dot(v, q))
+def get_dp_sh_mor(N):
+	B, b, u, v = gen_data(N)
+	_, t = solve_sh_mor(B, b, u, v)
+	return t
 
-tolerance = 9
-roundarr = lambda arr: list(map(lambda x: round(x, tolerance), arr))
-assert(roundarr(y1) == roundarr(y2))
+def get_dp_force(N):
+	B, b, u, v = gen_data(N)
+	A = B.toarray() + np.outer(u, v)
+	_, t = solve_force(A, b)
+	return t
 
-print(y2)
+def plot(s, d, filename):
+	fig = plt.figure(figsize=(3, 4), dpi=600)
+	ax = fig.gca()
+	ax.plot(s, d)
+	plt.xlabel('N')
+	plt.ylabel('t[s]')
+	plt.ylim([0, 0.5])
+	plt.grid()
+	fig.savefig(filename)
+
+s1 = np.logspace(2, 6, dtype=int, num=100)
+s2 = np.logspace(2, 3.6, dtype=int, num=100)
+d1 = [get_dp_sh_mor(N) for N in s1]
+d2 = [get_dp_force(N) for N in s2]
+
+plot(s1, d1, 'fast.pgf')
+plot(s2, d2, 'slow.pgf')
