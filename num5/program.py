@@ -6,7 +6,7 @@ import scipy.sparse.linalg
 import matplotlib
 import matplotlib.pyplot as plt
 
-N = 100
+N = 50
 
 x = np.array([float(x) for x in range(1, N+1)])
 
@@ -53,6 +53,14 @@ y_j = jacobi_test(A, x, 100)
 err_gs = list(map(lambda v: np.linalg.norm(v-ref), y_gs))
 err_j = list(map(lambda v: np.linalg.norm(v-ref), y_j))
 
+matplotlib.use("pgf")
+matplotlib.rcParams.update({
+	"pgf.texsystem": "pdflatex",
+	'font.family': 'serif',
+	'text.usetex': True,
+	'pgf.rcfonts': False,
+})
+
 fig = plt.figure(figsize=(6, 3.75), dpi=600)
 ax = fig.gca()
 line_a, = ax.plot(err_gs, linewidth=1)
@@ -61,7 +69,8 @@ line_a.set_label('metoda Gaussa-Seidela')
 line_b.set_label('metoda Jacobiego')
 ax.set_yscale('log')
 ax.legend()
-plt.xlabel('n')
-plt.ylabel('E')
+plt.xlabel('k')
+plt.ylabel('E(k)')
 plt.grid()
 fig.savefig('./chart.png')
+fig.savefig('./chart.pgf')

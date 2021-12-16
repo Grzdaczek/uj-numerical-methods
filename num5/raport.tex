@@ -1,0 +1,66 @@
+\documentclass[11pt]{extarticle}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{multicol}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{lipsum}
+\usepackage{mathtools}
+\usepackage{cuted}
+\usepackage{pgf}
+\usepackage{subfigure}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\author{Grzegorz Janysek}
+\title{Raport - Zadanie numeryczne 5}
+
+\begin{document}
+	\maketitle
+
+	\section{Wstęp teoretyczny}
+
+	\subsection{}
+	Rozwiązywanie układów równań liniowych za pomocą metod iteracyjnych polega na znalezieniu przybliżenia dokładnego wyniku na drodze skończonej liczby iteracji poczynając od dowolnie wybranego wektora.
+	Uzyskuje się to powtażając obliczenia i znajdując z każdą kolejną iteracją lepsze przybliżenie rozwiązania równiania.
+	
+	Wykonanie rozkładu macierzy w arytmetyce dokładnej pozwala na obliczenie ścisłego wyniku,
+	natomiast w przypadku omawianych metod iteracyjnych ścisły wynik musiał by być efektem iteracji których ilość dąży do nieskończoności.
+	W praktyce dokładność przybliżenia; ograniczoną typem danch, wybiera się dowolnie.
+	Mniejszy błąd przybliżenia wyniku równiania uzyskiwany jest większąliczbą iteracji.
+
+	Szybkością zbiegania metody iteracyjnej określa się tępo z jakim maleje błąd przybliżenia wyniku z każdą kolejną iteracją. Zakładając stałą złożoność iteracji, metoda która dla danego problemu zbiega się szybciej będzie lepsza.
+	\subsection{}
+	Porównywane dalej metody to metoda \textit{Jacobiego} i metoda \textit{Gaussa-Seidela} należą do ogólnej kategorii metod iteracyjnych:
+	\begin{align}
+		Mx^{(k+1)} = Nx^{(k)} + b
+	\end{align}
+	Gdzie indeks \(k\) oznacza numer iteracji. Dla równania \(Ax = b\), \(A = M - N\) jest podziałem wybranym w różny sposób w zależności od metody iteracyjnej. Podział dla metody \textit{Jacobiego} (\ref{splitting-1}) i \textit{Gaussa-Seidela} (\ref{splitting-2})
+	\begin{align}
+		\label{splitting-1}
+		&A = D + (L + U)	&&M=D		&&N = - (L + U) \\
+		\label{splitting-2}
+		&A = (D + L) + U	&&M=D + L	&&N = - U
+	\end{align}
+	Z powyższych wzorów można wyprowadzić wyrażenia na \(i\)-ty element wektora w \(k+1\) iteracji odpowiednio dla obu metod:
+	\begin{align}
+		x_i^{(k+1)} &= \frac{1}{a_{ii}} \left( b_i - \sum_{j=1}^{i-1} a_{ij} x_{i}^{(k)} - \sum_{j=i+1}^{N} a_{ij} x_{i}^{(k)} \right) \\
+		x_i^{(k+1)} &= \frac{1}{a_{ii}} \left( b_i - \sum_{j=1}^{i-1} a_{ij} x_{i}^{(k+1)} - \sum_{j=i+1}^{N} a_{ij} x_{i}^{(k)} \right)
+	\end{align}
+
+	\section{Wyniki}
+	\begin{figure}[H]
+		\begin{center}
+			\input{chart.pgf}
+		\end{center}
+		\caption{Bezwzględny błąd przybliżenia wyniku \(E\) od ilości iteracji \(k\) dla metod \textit{Jacobiego} i \textit{Gaussa-Seidela}}
+	\end{figure}
+	
+	\section{Podsumowanie}
+	Przewaga metod iteracyjnych jest widoczna gdy rozwiązanie równiania za pomocą faktoryzacji macierzy staje się zbyt kosztowne.
+	
+	Dla gęstej macierzy \(A\) złożoność rozkładu to \(O(n^3)\). Złożoność pojedynczej iteracji dla takiej macieży to \(O(n^2)\), stąd złożoność metody iteracyjnej dla \(k\) iteracji \(O(k*n^2)\). Jeżeli \(n\) jest bardzo duże i z przyczyn praktycznych nie możliwa jest faktoryzacja, metody iteracyjne pozwalają na uzyskanie przybliżenia i poprawianie go w kolejnych krokach w przypadku nie wystarczającej dokładności, przez co są bardziej plastyczne od rozkładu.
+
+	W porównywanych metodach iteracujnych istotne jest aby wykożystać strukturę macierzy i nie iterować po znanych elementach zerowych. W równaniu z zadania pozwala to na osiągnięcie liniowej złożoności pojedynczej iteracji.
+
+\end{document}
