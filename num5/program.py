@@ -28,29 +28,52 @@ def jacobi_test(A, b, n):
 	for _ in range(0, n):
 		x_next = x_last.copy()
 		for i in range(0, N):
-			s1 = sum([at(A, i, j) * x_last[j] for j in range(0, i) if at(A, i, j) != 0])
-			s2 = sum([at(A, i, j) * x_last[j] for j in range(i+1, N) if at(A, i, j) != 0])
-			x_next[i] = (b[i] - s1 - s2) / at(A, i, i)
+			def mul(t):
+				j, a_ij = t
+				if j != i:
+					return x_last[j] * a_ij
+				else:
+					return 0
+			row = A.getrow(i)
+			s = sum(map(mul, zip(row.indices, row.data)))
+			x_next[i] = (b[i] - s) / at(A, i, i)
 		data.append(x_next)
 		x_last = x_next
 	return data
 
 def gauss_seidel_test(A, b, n):
-	x = b.copy()
+	x_last = b.copy()
 	data = [b.copy()]
 	for _ in range(0, n):
+		x_next = x_last.copy()
 		for i in range(0, N):
-			s1 = sum([at(A, i, j) * x[j] for j in range(0, i) if at(A, i, j) != 0])
-			s2 = sum([at(A, i, j) * x[j] for j in range(i+1, N) if at(A, i, j) != 0])
-			x[i] = (b[i] - s1 - s2) / at(A, i, i)
-		data.append(x.copy())
+			def mul(t):
+				j, a_ij = t
+				if j < i:
+					return x_next[j] * a_ij
+				elif j > i:
+					return x_last[j] * a_ij
+				else:
+					return 0
+			row = A.getrow(i)
+			s = sum(map(mul, zip(row.indices, row.data)))
+			x_next[i] = (b[i] - s) / at(A, i, i)
+		data.append(x_next)
+		x_last = x_next
 	return data
 
 ref = sp.sparse.linalg.spsolve(A.tocsc(), x)
-y_gs = gauss_seidel_test(A, x, 20)
-y_j = jacobi_test(A, x, 100)
 
+print("Test: gauss seidel")
+y_gs = gauss_seidel_test(A, x, 50)
+
+print("Test: jacobi")
+y_j = jacobi_test(A, x, 200)
+
+print("Calc err: gauss seidel")
 err_gs = list(map(lambda v: np.linalg.norm(v-ref), y_gs))
+
+print("Calc err: jacobi err")
 err_j = list(map(lambda v: np.linalg.norm(v-ref), y_j))
 
 matplotlib.use("pgf")
@@ -63,14 +86,24 @@ matplotlib.rcParams.update({
 
 fig = plt.figure(figsize=(6, 3.75), dpi=600)
 ax = fig.gca()
-line_a, = ax.plot(err_gs, linewidth=1)
+
 line_b, = ax.plot(err_j, linewidth=1)
+line_a, = ax.plot(err_gs, linewidth=1)
+
+print("Plot err: gauss seidel")
 line_a.set_label('metoda Gaussa-Seidela')
+
+print("Plot err: jacobi")
 line_b.set_label('metoda Jacobiego')
+
 ax.set_yscale('log')
 ax.legend()
 plt.xlabel('k')
 plt.ylabel('E(k)')
 plt.grid()
+
+print("Save: png")
 fig.savefig('./chart.png')
+
+print("Save: pgf")
 fig.savefig('./chart.pgf')
