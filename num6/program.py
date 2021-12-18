@@ -12,42 +12,41 @@ def polynomial_fit(x, f_x, deg):
 
 	return sum([phi(j)*f_x[j] for j in range(deg)])
 
-def chart(f):
-	fig, axs = plt.subplots(2, 2)
-	uniform = lambda n: np.linspace(-1, 1, n)
-	x = np.linspace(-1, 1, 200)
+def chart(f, dist, filename):
+	fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(
+		nrows=2, 
+		ncols=2,
+		figsize=(6, 6),
+		dpi=600,
+		sharex=True,
+		sharey=True
+	)
 
 	def plot(ax, n):
-		ax.spines['left'].set_position('center')
-		ax.spines['bottom'].set_position('zero')
-		ax.spines['right'].set_color('none')
-		ax.spines['top'].set_color('none')
-		ax.xaxis.set_ticks_position('bottom')
-		ax.yaxis.set_ticks_position('left')
+		x = np.linspace(-1, 1, 200)
+		d = dist(n)
+		p = polynomial_fit(d, f(d), n)
+		ax.set_title(r'$ n={} $'.format(n))
 		ax.set_ylim([-0.5, 1.5])
-		# plt.xticks([-1, -0.5, 0, 0.5, 1])
-		# plt.yticks([1])
-		
-		u = uniform(n)
-		p = polynomial_fit(u, f(u), n)
-		ax.plot(x, f1(x), color='gray', linestyle='dashed')
-		ax.plot(x, p(x))
+		ax.set_xlim([-1, 1])
+		ax.scatter(d, p(d), color='black', marker='.')
+		ax.plot(x, f(x), color='gray', linestyle='dashed', linewidth=1)
+		ax.plot(x, p(x), linewidth=1)
 
-	plot(axs[0], 3)
-	plot(axs[1], 4)
-	plot(axs[2], 6)
-	plot(axs[3], 10)
+	plot(ax1, 3)
+	plot(ax2, 7)
+	plot(ax3, 13)
+	plot(ax4, 25)
 	
-	plt.savefig("chart.png")
+	plt.savefig(filename)
 
 f1 = lambda x: 1.0 / (1.0 + (25 * x**2))
 f2 = lambda x: 1.0 / (1.0 + x**2)
 
-chart(f1, "chart.png")
+uniform = lambda n: np.linspace(-1, 1, n)
+cosine =lambda n: np.cos([(np.pi*(2*i+1))/(2*n) for i in range(n)])
 
-# plt.legend([
-# 	r'$ f(x) $',
-# 	r'$ W_3(x) $',
-# 	r'$ W_5(x) $',
-# 	r'$ W_9(x) $',
-# ])
+chart(f1, uniform, "f1_u.png")
+chart(f1, cosine, "f1_c.png")
+chart(f2, uniform, "f2_u.png")
+chart(f2, cosine, "f2_c.png")
