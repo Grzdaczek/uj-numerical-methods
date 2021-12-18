@@ -4,13 +4,14 @@ import operator
 from numpy.polynomial import Polynomial
 from functools import reduce
 
-def polynomial_fit(x, f_x, deg):
+def polynomial_fit(x, y, deg):
 	def phi(j):
-		k_s = [k for k in range(deg) if k != j]
 		mul = lambda seq: reduce(operator.mul, seq, 1)
-		return mul([Polynomial([-x[k], 1]) for k in k_s]) / mul([x[j]-x[k] for k in k_s])
+		numerator = mul([Polynomial([-x[k], 1]) for k in range(deg) if k != j])
+		denominator = mul([x[j]-x[k] for k in range(deg) if k != j])
+		return numerator / denominator
 
-	return sum([phi(j)*f_x[j] for j in range(deg)])
+	return sum([phi(j)*y[j] for j in range(deg)])
 
 def chart(f, dist, filename):
 	fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(
