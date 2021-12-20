@@ -1,0 +1,76 @@
+\documentclass[11pt]{extarticle}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{multicol}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{lipsum}
+\usepackage{mathtools}
+\usepackage{cuted}
+\usepackage{pgf}
+\usepackage{subfigure}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\author{Grzegorz Janysek}
+\title{Raport - Zadanie numeryczne 5}
+
+\begin{document}
+	\maketitle
+
+	\section{Wstęp teoretyczny}
+
+	\pagebreak
+	\section{Wyniki}
+	\begin{figure}[H]
+		\begin{center}
+			\input{f1_u.pgf}
+		\end{center}
+		\caption{Interpolacja wielomianowa funkcji \( y(x)=\frac{1}{1+25x^2} \) dla jednorodnej dystrybucji \(n\) węzłów interpolacyjnych.}
+		\label{f1u}
+	\end{figure}
+	\begin{figure}[H]
+		\begin{center}
+			\input{f2_u.pgf}
+		\end{center}
+		\caption{Interpolacja wielomianowa funkcji \( \widetilde{y}(x)=\frac{1}{1+x^2} \) dla jednorodnej dystrybucji \(n\) węzłów interpolacyjnych.}
+		\label{f2u}
+	\end{figure}
+	\begin{figure}[H]
+		\begin{center}
+			\input{f1_c.pgf}
+		\end{center}
+		\caption{Interpolacja wielomianowa funkcji \( y(x)=\frac{1}{1+25x^2} \) dla kosinusoidalnej dystrybucji \(n\) węzłów interpolacyjnych.}
+		\label{f1c}
+	\end{figure}
+	\begin{figure}[H]
+		\begin{center}
+			\input{f2_c.pgf}
+		\end{center}
+		\caption{Interpolacja wielomianowa funkcji \( \widetilde{y}(x)=\frac{1}{1+x^2} \) dla kosinusoidalnej dystrybucji \(n\) węzłów interpolacyjnych.}
+		\label{f2c}
+	\end{figure}
+	\pagebreak
+
+	Na rys. od 1 do 4 przedstawione są wyniki interpolacji funkcji \(y\) i \(\widetilde{y}\)
+	\begin{align}
+		y(x) = \frac{1}{1+25x^2} \\
+		\widetilde{y}(x) = \frac{1}{1+x^2}
+	\end{align}
+	w zależności od doboru węzłów interpolacji \(x_i\), tj. ich ilości \(n\) i rodzaju dystrybucji.
+	\begin{align}
+		x_i &= \frac{2i}{n+1}-1 &&i=(0, 1, \dotsm, n)
+		\qquad \text{dystrybucja jednoroda} \\
+		x_i &= cos\left(\frac{2i+1}{2n+2}\pi\right) &&i=(0, 1, \dotsm, n) 
+		\qquad \text{dystrybucja kosinusoidalna}
+	\end{align}
+
+	Porównując rys. \ref{f1u} i \ref{f2u} można zauważyć że obecność oscylacji Rungego jest silnie zależna nie tylko od ilości węzłów interpolacji ale również od interpolowanej funkcji.
+	W przypadku \(y\) i dystrybucji jednorodnej (rys. \ref{f1u}) oscylacje zwiększają się wraz z \(n\), oraz są widoczne dla każdego zbadanego \(n\).
+	Algorytm interpolacji sprawdził znacząco lepiej dla \(\widetilde{y}\), funkcja jest odwzorowana dokładniej już dla małego \(n\), a oscylacje Rungego nie są zauważalne.
+
+	Zauważalną poprawę może dać odpowiedni dobór węzłów interpolacji. Analizując rys. \ref{f1c} i \ref{f2c} widać że zagęszczenie dystrybucji węzłów przy końcach przedziału interpolacji znacząco zmniejszyło oscylacje dla funkcji \(y\), oraz nie pogorszyło interpolacji \(\widetilde{y}\).
+
+	\section{Podsumowanie}
+	
+\end{document}
