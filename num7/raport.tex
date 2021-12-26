@@ -1,0 +1,105 @@
+\documentclass[11pt]{extarticle}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{multicol}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{lipsum}
+\usepackage{mathtools}
+\usepackage{cuted}
+\usepackage{pgf}
+\usepackage{subfigure}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\author{Grzegorz Janysek}
+\title{Raport - Zadanie numeryczne 6}
+
+\begin{document}
+	\maketitle
+
+	\section{Wstęp teoretyczny}
+
+	\subsection{}
+	Interpolacja za pomocą funkcji sklejanych, in. \textit{splajnów} (ang. spline) adresuje niepożądane zachowanie wielomianów Lagrange'a przy zwiększaniu ilości węzłów.
+	Występujący dla wielomianów wysokiego stopnia problem oscylacji Rungego, jest rozwiązywany poprzez ograniczanie się do wielomianów o niskich stopniach i wyznaczanie innego wielomianu dla każdego przedziału pomiędzy węzłami.
+	Wyznaczanie to odbywa się na podstawie warunków ciągłości funkcji sklejanej oraz ciągłości jej pochodnych w węzłach interpolacji.
+	Uzyskany splajn \(s\) rzędu \(k\) dla \(n\) węzłów \((x_1, x_2 \dotsm x_n)\) jest \textit{sklejeniem} \(n-1\) wielomianów \(k\)-tego stopnia.
+	\begin{align}
+		s(x) =
+		\left\{
+			\begin{array}{ll}
+				y_{1}(x)  & \mbox{dla} \quad x_1 \leq x < x_2 \\
+				y_{2}(x)  & \mbox{dla} \quad x_2 \leq x < x_3 \\
+				y_{3}(x)  & \mbox{dla} \quad x_3 \leq x < x_4 \\
+				\quad \vdots \\
+				y_{n-1}(x)  & \mbox{dla} \quad x_{n-1} \leq x \leq x_n \\
+			\end{array}
+		\right.
+	\end{align}
+	
+	\subsection{}
+	Najczęściej używa się splajnów kubicznych (ang. cubic spline) tj. splajnów trzeciego rzędu, do konstrukcji którego na każdym przedziale wyznacza się wielomian trzeciego stopnia: 
+	\begin{align}
+		y_j(x) = A f_j + B f_{j+1} + C \xi + D \xi_{j+1}
+	\end{align}
+	gdzie
+	\begin{align}
+		A &= \frac{x_{j+1} - x}{x_{j+1} - x_j} & B &= \frac{x - x_{j}}{x_{j+1} - x_j} \\[0.5cm]
+		C &= \frac{(A^3-A)(x_{j+1}-x_j)^2}{6} & D &= \frac{(B^3-B)(x_{j+1}-x_j)^2}{6}
+	\end{align}
+	Z warunku ciągłości pierwszej pochodnej w węzłach wynika że pochodna wielomianu \(y_j(x)\) w prawym krańcu przedziału musi się równać pochodnej \(y_{j+1}(x)\) w lewym krańcu przedziału. Korzystając z tego faktu i (2, 3, 4) można wyprowadzić wyrażenie będące trójdiagonalnym układem równań gdzie niewiadomą jest \(\xi\):
+	\begin{align}
+		\xi_{j-1} \left( \frac{x_j - x_{j-1}}{6} \right) + 
+		\xi_{j} \left( \frac{x_{j+1} - x_{j-1}}{3} \right) + 
+		\xi_{j+1} \left( \frac{x_{j+1} - x_{j}}{6} \right) = 
+		\frac{f_{j+1} - f{j}}{x_{j+1} - x_j} - 
+		\frac{f_{j} - f{j-1}}{x_j - x_{j-1}}
+	\end{align}
+	Warunki ciągłości nie obejmują skrajnych węzłów \(x_1\) i \(x_n\) parametry \(\xi_0\) oraz \(\xi_n\) nie są określane przez wyrażenie (5). Najczęściej stosuje się wiec naturalny splajn kubiczny dla którego \(\xi_0, \xi_n = 0\).
+
+	Przypadek węzłów interpolacji będących rozmieszczonych jednorodnie (w równej odległosci od siebie) upraszcza się do układu równań, gdzie \(d = x_{j+1} - x_j\):
+	\begin{align}
+		\begin{bmatrix}
+			4 & 1 \\
+			1 & 4 & 1 \\
+			& 1 & 4 & 1 \\
+			&& \ddots & \ddots & \ddots \\
+			&&& 1 & 4 & 1 \\
+			&&&& 1 & 4 & 1 \\
+			&&&&& 1 & 4 \\
+		\end{bmatrix}
+		\begin{bmatrix}
+			\xi_2 \\
+			\xi_3 \\
+			\xi_4 \\
+			\xi_5 \\
+			\xi_6 \\
+			\vdots \\
+			\xi_{n-1} \\
+		\end{bmatrix} = \frac{6}{d^2} 
+		\begin{bmatrix}
+			f_1 - 2f_2 + f_3 \\
+			f_2 - 2f_3 + f_4 \\
+			f_3 - 2f_4 + f_5 \\
+			f_4 - 2f_5 + f_6 \\
+			f_5 - 2f_6 + f_7 \\
+			\vdots \\
+			f_{n-2} - 2f_{n-1} + f_{n} \\
+		\end{bmatrix}
+	\end{align}
+	
+	\clearpage
+	\section{Wyniki}
+	\begin{figure}[H]
+		\begin{center}
+			\input{chart.pgf}
+		\end{center}
+		\caption{Interpolacja wielomianowa funkcji \( y(x)=\frac{1}{1+25x^2} \) dla jednorodnej dystrybucji \(n\) węzłów interpolacyjnych.}
+		\label{f1u}
+	\end{figure}
+	
+	\clearpage
+	\section{Podsumowanie}
+	
+\end{document}

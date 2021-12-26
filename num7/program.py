@@ -83,4 +83,4 @@ ax.plot(x, [s4(i) for i in x], label=r'$ s_{30}(x) $')
 
 fig.legend()
 fig.tight_layout()
-fig.savefig('chart.png')
+fig.savefig('chart.pgf')
