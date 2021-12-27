@@ -43,7 +43,9 @@
 	\begin{align}
 		y_j(x) = A f_j + B f_{j+1} + C \xi + D \xi_{j+1}
 	\end{align}
-	gdzie
+	\begin{center}
+		gdzie
+	\end{center}
 	\begin{align}
 		A &= \frac{x_{j+1} - x}{x_{j+1} - x_j} & B &= \frac{x - x_{j}}{x_{j+1} - x_j} \\[0.5cm]
 		C &= \frac{(A^3-A)(x_{j+1}-x_j)^2}{6} & D &= \frac{(B^3-B)(x_{j+1}-x_j)^2}{6}
@@ -58,7 +60,7 @@
 	\end{align}
 	Warunki ciągłości nie obejmują skrajnych węzłów \(x_1\) i \(x_n\) parametry \(\xi_0\) oraz \(\xi_n\) nie są określane przez wyrażenie (5). Najczęściej stosuje się wiec naturalny splajn kubiczny dla którego \(\xi_0, \xi_n = 0\).
 
-	Przypadek węzłów interpolacji będących rozmieszczonych jednorodnie (w równej odległosci od siebie) upraszcza się do układu równań, gdzie \(d = x_{j+1} - x_j\):
+	Przypadek węzłów interpolacji będących rozmieszczonych jednorodnie (w równej odległości od siebie) upraszcza się do układu równań, gdzie \(d = x_{j+1} - x_j\):
 	\begin{align}
 		\begin{bmatrix}
 			4 & 1 \\
@@ -88,18 +90,20 @@
 			f_{n-2} - 2f_{n-1} + f_{n} \\
 		\end{bmatrix}
 	\end{align}
+
+	\subsection{}
+	Niech \(f(x) = \frac{1}{1+25x^2}\), w zadaniu należy wyznaczyć interpolację funkcji \(f(x)\) naturalnym splajnem kubicznym \(s_k(x)\) dla kilku \(k\), gdzie \(k\) jest rzędem splajnu oraz przeanalizować błąd interpolacji \(\Delta_k = |s_k(x) - f(x)|\).
+	Węzły są rozmieszczone jednorodnie w przedziale \([-1, 1]\).
 	
-	\clearpage
 	\section{Wyniki}
 	\begin{figure}[H]
 		\begin{center}
 			\input{chart.pgf}
 		\end{center}
-		\caption{Interpolacja wielomianowa funkcji \( y(x)=\frac{1}{1+25x^2} \) dla jednorodnej dystrybucji \(n\) węzłów interpolacyjnych.}
+		\caption{Interpolacja naturalnymi splajnami kubicznymi \(s_k(x)\) funkcji \( f(x)=\frac{1}{1+25x^2} \) oraz błąd interpolacji \(\Delta_k = |s_k(x) - f(x)|\) dla wybranych rzędów \(k\). Węzły interpolacji są rozmieszczone jednorodnie.}
 		\label{f1u}
 	\end{figure}
 	
-	\clearpage
 	\section{Podsumowanie}
 	
 \end{document}

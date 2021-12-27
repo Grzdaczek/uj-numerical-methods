@@ -61,26 +61,43 @@ uniform = lambda n: np.linspace(-1, 1, n)
 f = lambda x: 1.0 / (1.0 + (25 * x**2))
 s = lambda n: Spline(uniform(n), f(uniform(n)), n)
 
-x = uniform(200)
+x = uniform(5040)
 
-fig = plt.figure(figsize=(6, 6), dpi=600)
-ax = fig.gca()
-ax.set_xlim([-1, 1])
-
-ax.plot(x, f(x), color='black', label=r'$ f(x) $')
-
-s1 = s(5)
-ax.plot(x, [s1(i) for i in x], label=r'$ s_5(x) $')
-
+s0 = s(5)
+s1 = s(6)
 s2 = s(7)
-ax.plot(x, [s2(i) for i in x], label=r'$ s_7(x) $')
-
 s3 = s(10)
-ax.plot(x, [s3(i) for i in x], label=r'$ s_{10}(x) $')
+s4 = s(20)
 
-s4 = s(30)
-ax.plot(x, [s4(i) for i in x], label=r'$ s_{30}(x) $')
+fig = plt.figure()
+fig, (ax1, ax2) = plt.subplots(nrows=2, sharex=True, figsize=(6, 8), dpi=600)
 
-fig.legend()
+ax1.plot(x, f(x), color='black', label=r'$ f(x) $')
+
+ax1.plot(x, [s0(i) for i in x], label=r'$ s_{5}(x) $')
+ax1.plot(x, [s1(i) for i in x], label=r'$ s_{6}(x) $')
+ax1.plot(x, [s2(i) for i in x], label=r'$ s_{7}(x) $')
+ax1.plot(x, [s3(i) for i in x], label=r'$ s_{10}(x) $')
+ax1.plot(x, [s4(i) for i in x], label=r'$ s_{20}(x) $')
+
+ax2.plot(x, [np.abs(s0(i) - f(i)) for i in x], label=r'$ E_{5}(x) $')
+ax2.plot(x, [np.abs(s1(i) - f(i)) for i in x], label=r'$ E_{6}(x) $')
+ax2.plot(x, [np.abs(s2(i) - f(i)) for i in x], label=r'$ E_{7}(x) $')
+ax2.plot(x, [np.abs(s3(i) - f(i)) for i in x], label=r'$ E_{10}(x) $')
+ax2.plot(x, [np.abs(s4(i) - f(i)) for i in x], label=r'$ E_{20}(x) $')
+
+ax1.grid(axis="x")
+ax2.grid(axis="x")
+
+ax1.set_ylabel(r'$ s_k(x) $, $ f(x) $')
+ax2.set_ylabel(r'$ \Delta_k(x) = |s_k(x) - f(x)| $')
+ax2.set_xlabel(r'$ x $')
+ax1.set_xlim([-1, 1])
+ax1.set_ylim([-0.2, 1.2])
+ax2.set_ylim([-0.1, 0.5])
+
+ax1.legend()
+ax2.legend()
+
 fig.tight_layout()
 fig.savefig('chart.pgf')
