@@ -93,17 +93,31 @@
 
 	\subsection{}
 	Niech \(f(x) = \frac{1}{1+25x^2}\), w zadaniu należy wyznaczyć interpolację funkcji \(f(x)\) naturalnym splajnem kubicznym \(s_k(x)\) dla kilku \(k\), gdzie \(k\) jest rzędem splajnu oraz przeanalizować błąd interpolacji \(\Delta_k = |s_k(x) - f(x)|\).
-	Węzły są rozmieszczone jednorodnie w przedziale \([-1, 1]\).
+	Węzły są rozmieszczone jednorodnie w przedziale \([-1; 1]\).
 	
 	\section{Wyniki}
 	\begin{figure}[H]
 		\begin{center}
 			\input{chart.pgf}
 		\end{center}
-		\caption{Interpolacja naturalnymi splajnami kubicznymi \(s_k(x)\) funkcji \( f(x)=\frac{1}{1+25x^2} \) oraz błąd interpolacji \(\Delta_k = |s_k(x) - f(x)|\) dla wybranych rzędów \(k\). Węzły interpolacji są rozmieszczone jednorodnie.}
-		\label{f1u}
+		\caption{
+			Dla wybranych rzędów \(k\): interpolacja naturalnymi splajnami kubicznymi \(s_k(x)\) funkcji \( f(x)=\frac{1}{1+25x^2} \), błąd interpolacji \(\Delta_k = |s_k(x) - f(x)|\).
+			Węzły interpolacji są rozmieszczone jednorodnie.
+		}
+		\label{ch}
 	\end{figure}
+	Na podstawie rys. \ref{ch} widać że wraz ze zwiększaniem rzędu splajnu \(s\) maleje błąd interpolacji.
+	Nie są widoczne skutki uboczne zwiększania ilości węzłów, takie jak oscylacje Rungego dla interpolacji wielomianowej.
+	Błąd interpolacji w węzłach wynosi \(0\) dla każdego rzędu \(k\), rośnie za każdym węzłem \(x_j\) osiągając maksimum lokalne w około połowie przedziału \(x \in [x_j; x_{j+1}] \), a następnie maleje do \(0\) w następnym węźle \(x_{j+1}\).
 	
+	Można też zauważyć że dla badanej funkcji \(f\) amplituda błędu może wzrosnąć po zwiększaniu rzędu splajnu, dzieje się tak dla \(k=5\) i \(k=6\).
+	Funkcja \(f\) jest symetryczna względem \(x=0\), więc dla nieparzystych rzędów jeden z węzłów wypada zawsze w osi symetrii (rys. 1: \(k=5, k=7\)).
+	Dla parzystych rzędów splajnu maksimum błędu znajduje się w osi symetrii \(x=0\), gdzie wypada środek przedziału między kolejnymi węzłami, a \(f(x)\) zmienia się naj szybciej.
+
 	\section{Podsumowanie}
+
+	Metoda interpolacji za pomocą funkcji sklejanych pozwala na osiągniecie dowolnego przybliżenia funkcji interpolowanej (pod warunkiem możliwości uzyskania nowych wartości funkcji interpolowanej w węzłach), zwiększając rząd splajnu.
+	Pomimo bazowania na wielomianach nie przejawia problemów z oscylacjami Rungego dzięki używaniu niskich stopni.
+	Najczęściej używaną formą interpolacji splajnami są splajny kubiczne, których wyznaczenie dla węzłów rozmieszczonych w równych odległościach upraszcza się znacząco.
 	
 \end{document}
