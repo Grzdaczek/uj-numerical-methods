@@ -1,5 +1,6 @@
 import numpy as np
 from scipy import integrate
+from inspect import signature
 
 class MemFn:
 	def __init__(self, f):
@@ -14,33 +15,45 @@ class MemFn:
 			self.mem[argv] = x
 			return x
 
-def newton_cotes(a, b, eps, iter, f):
-	def integrate(a, b, fa, fb, prev_value):
-		q = (a + b) / 2
-		fq = f(q)
+class CountedFn:
+	def __init__(self, f=lambda: ()):
+		self.f = f
+		self.i = 0
 
-		value = ((b - a) / 6) * (fa + 4*fq + fb)
-		err = np.abs(value - prev_value)
+	def __call__(self, *args):
+		self.i += 1
+		return self.f(*args)
 
-		if err < eps:
+	def collect(self):
+		return self.i
+
+epsc = lambda x: x / 10
+
+def newton_cotes(a, b, eps, iter, f, counter=lambda: ()):
+	f = MemFn(f)
+	best = 0
+
+	for i in range(iter):
+		counter()
+		space = np.linspace(a, b, 2**i + 1)
+		simpson = lambda p, q: ((q - p) / 6) * (f(p) + 4*f((p+q)/2) + f(q))
+		subvals = [simpson(p, q) for p, q in zip(space, space[1:])]
+		value = sum(subvals)
+		
+		if np.abs(value - best) < eps:
 			return value
 		else:
-			left = integrate(a, q, fa, fq, value / 2)
-			right = integrate(q, b, fq, fb, value / 2)
-			return left + right
+			best = value
 
-	return integrate(a, b, f(a), f(b), 0)
+	return best
 
-def db_newton_cotes(a, b, c, d, eps, iter, f):
-	return newton_cotes(a, b, eps, iter, lambda x: 
-		newton_cotes(c, d, eps, iter, lambda y: f(x, y)))
-
-def romberg(a, b, eps, iter, f):
+def romberg(a, b, eps, iter, f, counter=lambda: ()):
 	f = MemFn(f)
 	best = 0
 	val = {}
 
 	for j in range(1, iter+1):
+		counter()
 		h = (b - a) / 2**j
 		s = 2 * sum([f(a + k*h) for k in range(1, 2**j)])
 		val[(j, 1)] = (h/2) * (f(a) + s + f(b))
@@ -57,59 +70,55 @@ def romberg(a, b, eps, iter, f):
 
 	return best
 
-def db_romberg(a, b, c, d, eps, iter, f):
-	return romberg(a, b, eps, iter, lambda x: 
-		romberg(c, d, eps, iter, lambda y: f(x, y)))
+def db_newton_cotes(a, b, c, d, eps, iter, f, counter=lambda: ()):
+	inner = lambda x: newton_cotes(c, d, epsc(eps), iter, lambda y: f(x, y), counter)
+	return newton_cotes(a, b, eps, iter, inner, counter)
+
+def db_romberg(a, b, c, d, eps, iter, f, counter=lambda: ()):
+	inner = lambda x: romberg(c, d, epsc(eps), iter, lambda y: f(x, y), counter)
+	return newton_cotes(a, b, eps, iter, inner, counter)
 
 fn_a = lambda x: np.sin(x)
 fn_b = lambda x, y: np.log(x**2 + y**3 + 1)
 
-nc_fn_a = newton_cotes(
-	a=0, 
-	b=1, 
-	eps=10e-6, 
-	iter=15, 
-	f=fn_a
-)
+params = {
+	'a': 0,
+	'b': 1,
+	'eps': 10e-10,
+	'iter': 15,
+}
 
-rb_fn_a = romberg(
-	a=0, 
-	b=1, 
-	eps=10e-10, 
-	iter=15,
-	f=fn_a
-)
+nc_i = CountedFn()
+rb_i = CountedFn()
+nc_f = CountedFn(fn_a)
+rb_f = CountedFn(fn_a)
+nc = newton_cotes(**params, f=nc_f, counter=nc_i)
+rb = romberg(**params, f=rb_f, counter=rb_i)
+(ref, ea) = integrate.quad(fn_a, 0, 1)
 
-(ref_fn_a, ea) = integrate.quad(fn_a, 0, 1)
+print('--1--')
+print('nc', nc, nc_i.collect(), nc_f.collect())
+print('rb', rb, rb_i.collect(), rb_f.collect())
+print('ref', ref, ea)
 
-nc_fn_b = db_newton_cotes(
-	a=0,
-	b=1,
-	c=0,
-	d=1,
-	eps=10e-6,
-	iter=15,
-	f=fn_b
-)
+params = {
+	'a': 0,
+	'b': 1,
+	'c': 0,
+	'd': 1,
+	'eps': 10e-10,
+	'iter': 15,
+}
 
-rb_fn_b = db_romberg(
-	a=0,
-	b=1,
-	c=0,
-	d=1,
-	eps=10e-10,
-	iter=15,
-	f=fn_b
-)
+nc_i = CountedFn()
+rb_i = CountedFn()
+nc_f = CountedFn(fn_b)
+rb_f = CountedFn(fn_b)
+nc = db_newton_cotes(**params, f=nc_f, counter=nc_i)
+rb = db_romberg(**params, f=rb_f, counter=rb_i)
+(ref, eb) = integrate.dblquad(fn_b, 0, 1, lambda x: 0, lambda x: 1)
 
-(ref_fn_b, eb) = integrate.dblquad(fn_b, 0, 1, lambda x: 0, lambda x: 1)
-
-print('nc', nc_fn_a, nc_fn_a - ref_fn_a)
-print('rb', rb_fn_a, rb_fn_a - ref_fn_a)
-print('ref', ref_fn_a, ea)
-
-print()
-
-print('nc', nc_fn_b, ref_fn_b - nc_fn_b)
-print('rb', rb_fn_b, rb_fn_b - ref_fn_b)
-print('ref', ref_fn_b, eb)
+print('--2--')
+print('nc', nc, nc_i.collect(), nc_f.collect())
+print('rb', rb, rb_i.collect(), rb_f.collect())
+print('ref', ref, eb)
