@@ -13,12 +13,32 @@
 \usepackage[polish]{babel}
 \usepackage[utf8]{inputenc}
 \author{Grzegorz Janysek}
-\title{Raport - Zadanie numeryczne 7}
+\title{Raport - Zadanie numeryczne 8}
 
 \begin{document}
 	\maketitle
 
 	\section{Wstęp teoretyczny}
+	Celem całkowania numerycznego jest obliczenie zadanej istniejącej całki w efektywny sposób i ze znanym określonym błędem.
+	Aby to osiągnąć można przyjąć strategie przybliżania fragmentów funkcji całkowanej \(f\) za pomocą funkcji \(g\), tj. interpolować \(f\) za pomocą \(g\).
+	Funkcje interpolującą \(g\) dobiera się tak aby jej całkę dało się łatwo wyznaczyć analitycznie.
+
+	\subsection{}
+	Całkę na każdym przedział całkowania \([a; x_1], [x_1; x_2] \dotsm [x_n; b]\) można przybliżyć całką z wielomianu interpolacyjnego Lagrange'a na tym przedziale.
+	Sum ich wartości będzie całkowita wartość przybliżenia numerycznego całki \( \int_a^b f(x) dx\).
+	Uzyskujemy w ten sposób metodę kwadratur Newtona-Cotesa.
+	W zależności od doboru stopnia wielomianów interpolacyjnych otrzymujemy następujące kwadratury, odpowiadające kolejno stopniom wielomianów od 1 do 4:
+	\begin{align}
+		\text{Metoda trapezów:} \qquad &
+		\int_a^b f(x)\,dx \approx \frac{b-a}{2}(f_0 + f_1) \\
+		\text{Metoda Simpsona:} \qquad &
+		\int_a^b f(x)\,dx \approx \frac{b-a}{6}(f_0 + 4f_1 + f_2) \\
+		\text{Metoda 3/8:} \qquad &
+		\int_a^b f(x)\,dx \approx \frac{b-a}{8}(f_0 + 3f_1 + 3f_2 + f_3) \\
+		\text{Metoda Milne'a} \qquad &
+		\int_a^b f(x)\,dx \approx \frac{b-a}{90}(7f_0 + 32f_1 + 12f_2 + 32f_3 + 7f_4)
+	\end{align}
+	
 
 	\section{Wyniki}
 	
