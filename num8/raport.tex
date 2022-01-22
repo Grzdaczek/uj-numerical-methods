@@ -82,21 +82,24 @@
 				\textbf{0.4596976941}318.. & 
 				\textbf{0.4596976941}318.. \\
 			ilość iteracji			& \(F_1\) & 7 & 5 & - \\
-			ilość wyliczeń \(f\)	& \(F_1\) & 129 & 33 & - \\
+			ilość wyliczeń \(f_1\)	& \(F_1\) & 129 & 33 & - \\
 			\hline
-			wartośc & \(F_2\) & 
+			wartość & \(F_2\) & 
 				\textbf{0.4266771075}053.. &
 				\textbf{0.4266771075}061.. &
 				\textbf{0.4266771075}258.. \\
 			ilość iteracji			& \(F_2\) & 1164 & 772 & - \\
-			ilość wyliczeń \(f\)	& \(F_2\) & 65153 & 8097 & - \\
+			ilość wyliczeń \(f_2\)	& \(F_2\) & 65153 & 8097 & - \\
 		\end{tabular}
 	\end{table}
 
-	Szacowany błąd obliczeń przez metodę biblioteczną w obu przypadkach nie przekracza \(10^{-14}\). Jako że całka \(F_2\) jest podwójna, dla obu badanych metod, została ona obliczona iteracyjnie. Każde obliczenie funkcji pod zewnętrzną całką wiązało się z obliczeniem wartości całki wewnętrznej. Zrealizowane zostało to z użyciem wyrażeń lambda.
+	Szacowany błąd obliczeń przez metodę biblioteczną w obu przypadkach nie przekracza \(10^{-14}\).
+	Jako że całka \(F_2\) jest podwójna, dla obu badanych metod, została ona obliczona iteracyjnie. Każde obliczenie funkcji pod zewnętrzną całką wiązało się z obliczeniem wartości całki wewnętrznej.
+	Zrealizowane zostało to z użyciem wyrażeń lambda.
 
 	\section{Podsumowanie}
 
-	Metoda Romberga osiąga zadaną dokładność prz znaczenie mniejszej ilość iteracji i co za tym idzie, mniejszej ilości wyliczeń całkowanej funkcji, Podczas implementacji obu metod niezwykle istotne jest aby nie obliczać ponownie znanych już wartości całkowanej funkcji.
+	Metoda Romberga osiąga zadaną dokładność przy znaczenie mniejszej ilości iteracji i co za tym idzie, mniejszej ilości wyliczeń całkowanej funkcji.
+	Podczas implementacji obu metod niezwykle istotne jest aby nie obliczać ponownie znanych już wartości całkowanej funkcji.
 
 \end{document}
