@@ -24,8 +24,8 @@
 	Funkcje interpolującą \(g\) dobiera się tak aby jej całkę dało się łatwo wyznaczyć analitycznie.
 
 	\subsection{}
-	Całkę na każdym przedział całkowania \([a; x_1], [x_1; x_2] \dotsm [x_n; b]\) można przybliżyć całką z wielomianu interpolacyjnego Lagrange'a na tym przedziale.
-	Sum ich wartości będzie całkowita wartość przybliżenia numerycznego całki \( \int_a^b f(x) dx\).
+	Całkę na każdym przedział całkowania \([x_0; x_1], [x_1; x_2] \dotsm [x_{n-1}; x_n]\) można przybliżyć całką z wielomianu interpolacyjnego Lagrange'a na tym przedziale.
+	Sumą ich wartości będzie całkowita wartość przybliżenia numerycznego całki \( \int_{x_0}^{x_n} f(x) dx\).
 	Uzyskujemy w ten sposób metodę kwadratur Newtona-Cotesa.
 	W zależności od doboru stopnia wielomianów interpolacyjnych otrzymujemy następujące kwadratury, odpowiadające kolejno stopniom wielomianów od 1 do 4:
 	\begin{align}
@@ -40,13 +40,11 @@
 	\end{align}
 
 	Proces zagęszczania przedziałów całkowania powtarza się iteracyjnie do momentu, gdy kolejne wyniki są takie same jak poprzednie z dokładnością do ustalonego małego \(\epsilon\).
-	Aby nie zminimalizować konieczność obliczania wartości funkcji \(f\), z każdą iteracją przedziały można dzielić na \(n\) fragmentów (w zależności od metody).
-	Wykorzystując punkty z obliczonymi już wartościami \(f\) na potrzeby kwadratur jako granice nowych przedziałów.
-	
+
 	\subsection{}
-	Kwadratury Newtona-Cotesa nie używają z wcześniej obliczonych przybliżeń w kolejnych krokach.
+	Kwadratury Newtona-Cotesa nie używają wcześniej obliczonych przybliżeń w kolejnych krokach.
 	Metoda Romberga łączy metodę trapezów i ekstrapolacje Richardsona.
-	Na podstawie ciągu poprzednich przybliżeń całki, ekstrapoluje jej wartość. 
+	Na podstawie ciągu poprzednich przybliżeń całki, ekstrapoluje jej wartość.
 	Może być zdefiniowana jako:
 	\begin{align}
 		h_n &= \frac{b-a}{2^n}, \quad 1 \leq m \leq n
@@ -62,12 +60,14 @@
 	Warunkiem zakończenia iteracji jest taka sama wartość \(R_{n,n}\) i \(R_{n-1, n-1}\) z dokładnością do ustalonego małego \(\epsilon\).
 
 	\subsection{}
-	W zadaniu należy zaimplementować dwie funkcje całkujące \(f\) na przedziale \([a;b]\) z bezwzględnym błędem \(\epsilon\).
-	Wykorzystują złożoną kwadraturę Newtona-Cotesa z metodą Simpsona oraz Metodę Romberga.
+	W zadaniu należy zaimplementować dwie metody całkowania.
+	Wykorzystującą złożoną kwadraturę Newtona-Cotesa z metodą Simpsona oraz Metodę Romberga.
 	Należy następnie obliczyć z błędem \(\epsilon = 10^{-10}\) całki:
 	\begin{align}
-		F_1 &\equiv \int_0^1 sin(x)\,dx \\
-		F_2 &\equiv \int_0^1 \int_0^1 ln(x^2 + y^2 + 1)\,dx\,dy
+		F_1 &\equiv \int_0^1 f_1(x)\,dx
+		= \int_0^1 sin(x)\,dx \\
+		F_2 &\equiv \int_0^1 \int_0^1 f_2(x, y)\,dy\,dx
+		= \int_0^1 \int_0^1 ln(x^2 + y^2 + 1)\,dx\,dy
 	\end{align}
 
 	\section{Wyniki}
@@ -77,14 +77,14 @@
 		\begin{tabular}{r|c||c|c|c}
 			& całka & metoda Simpsona & metoda Romberga & funkcja biblioteczna \\
 			\hline
-			wartość & \(F_1\) & 
-				\textbf{0.4596976941}413.. & 
-				\textbf{0.4596976941}318.. & 
+			wartość & \(F_1\) &
+				\textbf{0.4596976941}413.. &
+				\textbf{0.4596976941}318.. &
 				\textbf{0.4596976941}318.. \\
 			ilość iteracji			& \(F_1\) & 7 & 5 & - \\
 			ilość wyliczeń \(f_1\)	& \(F_1\) & 129 & 33 & - \\
 			\hline
-			wartość & \(F_2\) & 
+			wartość & \(F_2\) &
 				\textbf{0.4266771075}053.. &
 				\textbf{0.4266771075}061.. &
 				\textbf{0.4266771075}258.. \\
@@ -94,7 +94,13 @@
 	\end{table}
 
 	Szacowany błąd obliczeń przez metodę biblioteczną w obu przypadkach nie przekracza \(10^{-14}\).
-	Jako że całka \(F_2\) jest podwójna, dla obu badanych metod, została ona obliczona iteracyjnie. Każde obliczenie funkcji pod zewnętrzną całką wiązało się z obliczeniem wartości całki wewnętrznej.
+	Jako że całka \(F_2\) jest podwójna, dla obu badanych metod, została ona obliczona iteracyjnie. Każde obliczenie funkcji pod zewnętrzną całką wiązało się z numerycznym wyznaczeniem wartości całki wewnętrznej.
+	\begin{align}
+		\label{f2_lambda}
+		F_2 &\equiv \int_0^1 \int_0^1 f_2(x, y)\,dy\,dx
+		= \int_0^1 g(x)\,dx, \quad \text{gdzie: } g(x)
+		= \int_0^1 f_2(x, y)\,dy
+	\end{align}
 	Zrealizowane zostało to z użyciem wyrażeń lambda.
 
 	\section{Podsumowanie}
