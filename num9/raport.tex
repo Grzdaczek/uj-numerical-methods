@@ -1,0 +1,62 @@
+\documentclass[11pt]{extarticle}
+\usepackage[a4paper, margin=1in]{geometry}
+\usepackage{multicol}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{lipsum}
+\usepackage{mathtools}
+\usepackage{cuted}
+\usepackage{pgf}
+\usepackage{subfigure}
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\author{Grzegorz Janysek}
+\title{Raport - Zadanie numeryczne 9}
+
+\begin{document}
+	\maketitle
+
+	\section{Wstęp teoretyczny}
+	
+	\section{Wstęp teoretyczny}
+	Funkcja rzeczywista ciągła na przedziale \([a;b]\) przyjmuje wszystkie wartości należące do tego przedziału.
+	Korzystając z tego faktu, oraz wybierając \(a\) i \(b\) tak żeby znak funkcji \(f\) w tych punktach był różny, mamy pewność, że 
+	\begin{align}
+		\exists \,c \in [a;b] : f(x) = 0
+	\end{align}
+	Innymi słowy \(f\) ma co najmniej jeden pierwiastek w przedziale \([a;b]\).
+	
+	\subsection{}
+	Na tym rozumowaniu opierają się metody reguła falsi i bisekcji, służące znajdywaniu pierwiastków funkcji.
+	Są to metody iteracyjne, opierające się na zawężaniu przedziału \([a;b]\) zachowując przy tym różne znaki funkcji na krańcach tego przedziału.
+	W obu metodach sprawdzany jest znak wybranego punktu \(c \in [a;b]\).
+	Jeśli znak \(f(c)\) jest taki sam jak \(f(a)\) to \(c\) staje się nowym \(a\).
+	W przeciwnym wypadku \(c\) staje się nowym \(b\). Metody rozróżnia sposób wyboru \(c\).
+	Dla regula falsi jest to pierwiastek prostej przeprowadzonej przez f(a) i f(b):
+	\begin{align}
+		c = \frac{ f(a)b - f(b)a }{ f(a) - f(b) }
+	\end{align}
+	Natomiast dla metody bisekcji jest to średnia arytmetyczna a i b:
+	\begin{align}
+		c = f\left(\frac{a+b}{2}\right)
+	\end{align}
+	
+	\subsection{}
+	Inną strategię reprezentują metoda Newtona i metoda siecznych.
+	Nie gwarantują one zbieżności, ale nie wymagają znajomosci przedziału na którym funkcja zmienia znak.
+	Metoda Newtona uzyskuje następne przybliżenie znajdując pierwiastek prostej będącej styczną do funkcji \(f\) w poprzednim punkcie. Wymaga ona znajomości \(f'\):
+	\begin{align}
+		x_{n} = x_{n-1} - \frac{f(x_{n-1})}{f'(x_{n-1})}
+	\end{align}
+	Metoda siecznych działa analogicznie, jednak nie wymaga \(f'\), a prostą jest sieczna oparta na wartościach funkcji w dwóch poprzednich iteracjach:
+	\begin{align}
+		x_{n} = \frac{ f(x_{n-2})x_{n-1} - f(x_{n-1})x_{n-2} }{ f(x_{n-2}) - f(x_{n-1}) }
+	\end{align}
+
+	\section{Wyniki}
+	
+	\section{Podsumowanie}
+
+\end{document}
