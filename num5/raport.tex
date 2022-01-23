@@ -51,7 +51,6 @@
 		x_i^{(k+1)} &= \frac{1}{a_{ii}} \left( b_i - \sum_{j=1}^{i-1} a_{ij} x_{i}^{(k+1)} - \sum_{j=i+1}^{N} a_{ij} x_{i}^{(k)} \right)
 	\end{align}
 
-	\pagebreak
 	\subsection{}
 	W ćwiczeniu należy rozwiązać układ równań \(Ax = b\) za pomocą omawianych metod iteracyjnych i porównać ich tempo zbieżności do rozwiązania.
 	\begin{align}
@@ -75,6 +74,125 @@
 	\end{align}
 	
 	\section{Wyniki}
+
+	\begin{figure}[H]
+		\begin{align}
+			x = \begin{bmatrix}
+				0.17126009 \\
+				0.37523974 \\
+				0.55489993 \\
+				0.74060385 \\
+				0.92602310 \\
+				1.11108743 \\
+				1.29629727 \\
+				1.48148292 \\
+				1.66666609 \\
+				1.85185195 \\
+				2.03703705 \\
+				% 2.22222221 \\
+				% 2.40740741 \\
+				% 2.59259259 \\
+				% 2.77777778 \\
+				% 2.96296296 \\
+				% 3.14814815 \\
+				% 3.33333333 \\
+				% 3.51851852 \\
+				% 3.70370370 \\
+				% 3.88888889 \\
+				% 4.07407407 \\
+				% 4.25925926 \\
+				% 4.44444444 \\
+				% 4.62962963 \\
+				% 4.81481481 \\
+				% 5.00000000 \\
+				% 5.18518519 \\
+				% 5.37037037 \\
+				% 5.55555556 \\
+				% 5.74074074 \\
+				% 5.92592593 \\
+				% 6.11111111 \\
+				% 6.29629630 \\
+				% 6.48148147 \\
+				% 6.66666672 \\
+				% 6.85185177 \\
+				% 7.03703673 \\
+				% 7.22222479 \\
+				% 7.40739955 \\
+				% 7.59259499 \\
+				% 7.77787115 \\
+				% 7.96249685 \\
+				% 8.14907400 \\
+				% 8.33522653 \\
+				% 8.49740196 \\
+				% 8.77672533 \\
+				% 8.83013724 \\
+				% 8.37619757 \\
+				\vdots \\
+				13.2859250 \\ 
+			\end{bmatrix}
+		\end{align}
+		\caption{Rozwiązanie równania obliczone za pomocą metody Jacobiego}
+	\end{figure}
+
+	\begin{figure}[H]
+		\begin{align}
+			x = \begin{bmatrix}
+				0.17126009 \\
+				0.37523974 \\
+				0.55489993 \\
+				0.74060385 \\
+				0.92602310 \\
+				1.11108743 \\
+				1.29629727 \\
+				1.48148292 \\
+				1.66666609 \\
+				1.85185195 \\
+				2.03703705 \\
+				% 2.22222221 \\
+				% 2.40740741 \\
+				% 2.59259259 \\
+				% 2.77777778 \\
+				% 2.96296296 \\
+				% 3.14814815 \\
+				% 3.33333333 \\
+				% 3.51851852 \\
+				% 3.70370370 \\
+				% 3.88888889 \\
+				% 4.07407407 \\
+				% 4.25925926 \\
+				% 4.44444444 \\
+				% 4.62962963 \\
+				% 4.81481481 \\
+				% 5.00000000 \\
+				% 5.18518519 \\
+				% 5.37037037 \\
+				% 5.55555556 \\
+				% 5.74074074 \\
+				% 5.92592593 \\
+				% 6.11111111 \\
+				% 6.29629630 \\
+				% 6.48148147 \\
+				% 6.66666672 \\
+				% 6.85185177 \\
+				% 7.03703673 \\
+				% 7.22222479 \\
+				% 7.40739955 \\
+				% 7.59259499 \\
+				% 7.77787115 \\
+				% 7.96249685 \\
+				% 8.14907400 \\
+				% 8.33522653 \\
+				% 8.49740196 \\
+				% 8.77672533 \\
+				% 8.83013724 \\
+				% 8.37619757 \\
+				\vdots \\
+				13.2859250 \\ 
+			\end{bmatrix}
+		\end{align}
+		\caption{Rozwiązanie równania obliczone za pomocą metody Gaussa-Seidela}
+	\end{figure}
+
 	\begin{figure}[H]
 		\begin{center}
 			\input{chart.pgf}
@@ -85,10 +203,8 @@
 	Wykres przedstawia wartość błędu bezwzględnego \(E(k) = |x^{(k)} - x|\) dla obu metod.
 	Wartość \(x\) została obliczona za pomocą biblioteki numerycznej.
 	Dla zadanej macierzy \(A\) metoda \textit{Gaussa-Seidela} zbiega się szybciej, ponieważ w \(k+1\) kroku iteracji do obliczenia danej składowej wektora \(x^{(k+1)}\) oprócz \(x^{(k)}\), wykorzystuje ona obliczone już w poprzednich krokach danej iteracji składowe tego \(x^{(k+1)}\), natomiast metoda \textit{Jacobiego} używa z wartości tylko z \(x^{(k)}\).
-	
-	Wypłaszczenie wykresów jest spowodowane osiągnięciem granicy dokładności numerycznej wykorzystywanego typu danych.
-	
-	\pagebreak
+	Warunkiem zakończenia iteracji w obu przypadkach było zrównanie się norm przybliżeń z kroku poprzedniego i następnego z dokładnością do \(\epsilon = 10^{-12}\)
+
 	\section{Podsumowanie}
 	Przewaga metod iteracyjnych jest widoczna gdy, rozwiązanie równiania za pomocą faktoryzacji macierzy staje się zbyt kosztowne.
 	

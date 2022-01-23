@@ -22,7 +22,7 @@ def at(A, i, j):
 	else:
 		return 0.0
 
-def jacobi_test(A, b, n):
+def jacobi_test(A, b, n, eps):
 	x_last = b.copy()
 	data = [b.copy()]
 	for _ in range(0, n):
@@ -38,10 +38,13 @@ def jacobi_test(A, b, n):
 			s = sum(map(mul, zip(row.indices, row.data)))
 			x_next[i] = (b[i] - s) / at(A, i, i)
 		data.append(x_next)
-		x_last = x_next
+		if(np.abs(sp.linalg.norm(x_last) - sp.linalg.norm(x_next)) < eps):
+			break
+		else:
+			x_last = x_next
 	return data
 
-def gauss_seidel_test(A, b, n):
+def gauss_seidel_test(A, b, n, eps):
 	x_last = b.copy()
 	data = [b.copy()]
 	for _ in range(0, n):
@@ -59,16 +62,21 @@ def gauss_seidel_test(A, b, n):
 			s = sum(map(mul, zip(row.indices, row.data)))
 			x_next[i] = (b[i] - s) / at(A, i, i)
 		data.append(x_next)
-		x_last = x_next
+		if(np.abs(sp.linalg.norm(x_last) - sp.linalg.norm(x_next)) < eps):
+			break
+		else:
+			x_last = x_next
 	return data
 
 ref = sp.sparse.linalg.spsolve(A.tocsc(), x)
 
 print("Test: gauss seidel")
-y_gs = gauss_seidel_test(A, x, 50)
+y_gs = gauss_seidel_test(A, x, 200, 10e-12)
+print(y_gs[-1])
 
 print("Test: jacobi")
-y_j = jacobi_test(A, x, 200)
+y_j = jacobi_test(A, x, 200, 10e-12)
+print(y_j[-1])
 
 print("Calc err: gauss seidel")
 err_gs = list(map(lambda v: np.linalg.norm(v-ref), y_gs))
