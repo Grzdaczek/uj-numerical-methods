@@ -19,18 +19,16 @@
 	\maketitle
 
 	\section{Wstęp teoretyczny}
-	
-	\section{Wstęp teoretyczny}
 	Funkcja rzeczywista ciągła na przedziale \([a;b]\) przyjmuje wszystkie wartości należące do tego przedziału.
 	Korzystając z tego faktu, oraz wybierając \(a\) i \(b\) tak żeby znak funkcji \(f\) w tych punktach był różny, mamy pewność, że 
 	\begin{align}
-		\exists \,c \in [a;b] : f(x) = 0
+		\exists \,c \in [a;b] : f(c) = 0
 	\end{align}
 	Innymi słowy \(f\) ma co najmniej jeden pierwiastek w przedziale \([a;b]\).
 	
 	\subsection{}
-	Na tym rozumowaniu opierają się metody reguła falsi i bisekcji, służące znajdywaniu pierwiastków funkcji.
-	Są to metody iteracyjne, opierające się na zawężaniu przedziału \([a;b]\) zachowując przy tym różne znaki funkcji na krańcach tego przedziału.
+	Na tym rozumowaniu opierają się metody falsi i bisekcji, służące znajdywaniu pierwiastków funkcji.
+	Są to metody iteracyjne, sukcesywnie zawężające przedział \([a;b]\) zachowując przy tym różne znaki funkcji na krańcach tego przedziału.
 	W obu metodach sprawdzany jest znak wybranego punktu \(c \in [a;b]\).
 	Jeśli znak \(f(c)\) jest taki sam jak \(f(a)\) to \(c\) staje się nowym \(a\).
 	W przeciwnym wypadku \(c\) staje się nowym \(b\). Metody rozróżnia sposób wyboru \(c\).
@@ -55,30 +53,49 @@
 		x_{n} = \frac{ f(x_{n-2})x_{n-1} - f(x_{n-1})x_{n-2} }{ f(x_{n-2}) - f(x_{n-1}) }
 	\end{align}
 
+	\subsection{}
+	W zadaniu należy znaleźć pierwiastki następujących funkcji (6), (7). Z dokładnością do \(\epsilon=10^{-6}\), za pomocą opisanych wyżej metod.
+	\begin{align}
+		f(x) &= sin(x) - 0.37 \\
+		g(x) &= f^2(x) = (sin(x) - 0.37)^2
+	\end{align}
+	Oraz zbadać zachowanie się błędu przybliżenia \(|x_i - x^\star|\) w zależności od iteracji.
+
 	\section{Wyniki}
 
 	\begin{figure}[H]
 		\begin{center}
 			\input{ch1.pgf}
 		\end{center}
-		\caption{aa?}
+		\caption{Błąd przybliżenia pierwiastka od ilości iteracji dla funkcji \(f(x)\)}
 		\label{ch1}
 	\end{figure}
 	\begin{figure}[H]
 		\begin{center}
 			\input{ch2.pgf}
 		\end{center}
-		\caption{aa?}
+		\caption{Błąd przybliżenia pierwiastka od ilości iteracji dla funkcji \(g(x)\)}
 		\label{ch2}
 	\end{figure}
 	\begin{figure}[H]
 		\begin{center}
 			\input{ch3.pgf}
 		\end{center}
-		\caption{aa?}
+		\caption{Błąd przybliżenia pierwiastka od ilości iteracji dla funkcji \(u(x) = \frac{g(x)}{g'(x)}\)}
 		\label{ch3}
 	\end{figure}
 
+
 	\section{Podsumowanie}
+	Choć może być rozbieżna, dla pierwiastków jednokrotnych metoda Newtona uzyskuje zbieżność kwadratową, najlepszą pośród badanych metod.
+	W przypadku pierwiastków wielokrotnych zbieżność metody staje się liniowa.
+	W celu zachowania zbieżności kwadratowej, algorytm można usprawnić aby nie poszukiwał on \(x:g(x)=0\), tylko \(x:\frac{g(x)}{g'(x)}=0\).
+	Zachowujemy w ten sposób pozycje miejsc zerowych, redukując jednocześnie ich krotność.
+	To samo usprawnienie działa również w przypadku metody siecznych.
+
+	Konieczność znania dwóch argumentów dla których funkcja przyjmuje różne znaki może uniemożliwiać poszukiwania pierwiastków za pomocą metod bisekcji i falsi.
+	Nie jest więc możliwe ich zastosowanie w przypadku funkcji \(g\), ponieważ przyjmuje ona tylko wartości nieujemne.
+
+	Pomimo tych samych ograniczeń metoda bisekcji ma dużo gorszą zbieżność od metody falsi, upraszcza jedynie wyznaczanie następnego punktu, nie wymagając przy tym dzielenia.
 
 \end{document}
